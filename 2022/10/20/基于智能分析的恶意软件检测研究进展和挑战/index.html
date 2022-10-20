@@ -1,0 +1,401 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><div id="myscoll"></div><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>基于智能分析的恶意软件检测研究进展和挑战 | Rongzhiyのblog</title><meta name="keywords" content="网络安全、恶意软件检测、智能分析"><meta name="author" content="阿泽"><meta name="copyright" content="阿泽"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="摘要 在应对恶意软件变种和新增恶意软件时，基于特征匹配等方法的传统恶意软件检测手段往往存在较高的误报率和漏报率。随着人工智能技术的发展，将人工智能应用在恶意软件检测领域具有广阔的发展空间。首先，从数据集构建、安全特征提取、安全特征处理、分类器选择、模型验证和性能评估这5个方面对Windows平台下的恶意软件智能分析相关工作进行了归纳总结；其次，对智能分析在恶意软件检测上所面临的挑战和问题进行了较为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于智能分析的恶意软件检测研究进展和挑战">
+<meta property="og:url" content="https://rongzhiy.github.io/2022/10/20/%E5%9F%BA%E4%BA%8E%E6%99%BA%E8%83%BD%E5%88%86%E6%9E%90%E7%9A%84%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E6%A3%80%E6%B5%8B%E7%A0%94%E7%A9%B6%E8%BF%9B%E5%B1%95%E5%92%8C%E6%8C%91%E6%88%98/index.html">
+<meta property="og:site_name" content="Rongzhiyのblog">
+<meta property="og:description" content="摘要 在应对恶意软件变种和新增恶意软件时，基于特征匹配等方法的传统恶意软件检测手段往往存在较高的误报率和漏报率。随着人工智能技术的发展，将人工智能应用在恶意软件检测领域具有广阔的发展空间。首先，从数据集构建、安全特征提取、安全特征处理、分类器选择、模型验证和性能评估这5个方面对Windows平台下的恶意软件智能分析相关工作进行了归纳总结；其次，对智能分析在恶意软件检测上所面临的挑战和问题进行了较为">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2022-10-20T12:37:43.000Z">
+<meta property="article:modified_time" content="2022-10-20T12:39:45.910Z">
+<meta property="article:author" content="阿泽">
+<meta property="article:tag" content="网络安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://rongzhiy.github.io/2022/10/20/%E5%9F%BA%E4%BA%8E%E6%99%BA%E8%83%BD%E5%88%86%E6%9E%90%E7%9A%84%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E6%A3%80%E6%B5%8B%E7%A0%94%E7%A9%B6%E8%BF%9B%E5%B1%95%E5%92%8C%E6%8C%91%E6%88%98/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-10-20 20:39:45'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/cat.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Rongzhiyのblog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">基于智能分析的恶意软件检测研究进展和挑战</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-10-20T12:37:43.000Z" title="发表于 2022-10-20 20:37:43">2022-10-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-10-20T12:39:45.910Z" title="更新于 2022-10-20 20:39:45">2022-10-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="基于智能分析的恶意软件检测研究进展和挑战"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><p><strong>摘要</strong></p>
+<p>在应对恶意软件变种和新增恶意软件时，基于特征匹配等方法的传统恶意软件检测手段往往存在较高的误报率和漏报率。随着人工智能技术的发展，将人工智能应用在恶意软件检测领域具有广阔的发展空间。首先，从数据集构建、安全特征提取、安全特征处理、分类器选择、模型验证和性能评估这5个方面对Windows平台下的恶意软件智能分析相关工作进行了归纳总结；其次，对智能分析在恶意软件检测上所面临的挑战和问题进行了较为细致的阐述；最后，针对所面临的挑战，指出未来潜在的研究方向。</p>
+<p><strong>内容目录</strong>  </p>
+<p>1   数据集构建</p>
+<p>1.1   公开数据集</p>
+<p>1.2    自建数据集</p>
+<p>1.3   小  结</p>
+<p>2   安全特征提取</p>
+<p>2.1   静态分析特征</p>
+<p>2.1.1   字节序列特征</p>
+<p>2.1.2   可阅读字符串</p>
+<p>2.1.3   PE文件信息</p>
+<p>2.1.4   信息熵</p>
+<p>2.1.5   DDL 相关信息</p>
+<p>2.2   动态分析特征</p>
+<p>2.2.1   系统运行状态信息</p>
+<p>2.2.2   系统操作信息</p>
+<p>2.2.3   网络行为特征</p>
+<p>2.3   动静混合分析特征</p>
+<p>2.3.1   操作码特征</p>
+<p>2.3.2   API系统调用特征</p>
+<p>2.4   图像分析特征</p>
+<p>2.5   小  结</p>
+<p>3   安全特征处理</p>
+<p>3.1   信息增益法</p>
+<p>3.2   PCA 方法</p>
+<p>3.3   运用分类器处理特征</p>
+<p>3.4   embedding 技术</p>
+<p>3.5   小  结</p>
+<p>4   分类器选择</p>
+<p>4.1   机器学习分类器</p>
+<p>4.1.1   K 近邻算法</p>
+<p>4.1.2   K-means 算法</p>
+<p>4.1.3   SVM</p>
+<p>4.1.4   决策树</p>
+<p>4.2   深度学习分类器</p>
+<p>4.2.1   CNN</p>
+<p>4.2.2   循环神经网络</p>
+<p>4.2.3   BP 神经网络</p>
+<p>4.2.4   图卷积神经网络</p>
+<p>4.3   集成学习分类器</p>
+<p>4.3.1   随机森林</p>
+<p>4.3.2   GBDT、XGBoost 和 LightGBM</p>
+<p>4.4   小  结</p>
+<p>5   模型验证和性能评估</p>
+<p>5.1   模型验证</p>
+<p>5.2   性能评估</p>
+<p>5.3   小  结</p>
+<p>6   智能分析面临的挑战</p>
+<p>6.1   数据样本相关问题</p>
+<p>6.1.1   数据样本现状问题</p>
+<p>6.1.2   样本收集相关问题</p>
+<p>6.1.3   数据样本标注问题</p>
+<p>6.1.4   新型威胁样本问题</p>
+<p>6.2   分析方法相关问题</p>
+<p>6.2.1   静态分析局限性</p>
+<p>6.2.2   动态分析局限性</p>
+<p>6.2.3   图像分析局限性</p>
+<p>6.3   信息丢失问题</p>
+<p>6.4   可解释差问题</p>
+<p>6.5   对抗样本攻击问题</p>
+<p>6.6   小  结</p>
+<p>7   总结与展望</p>
+<p>随着信息技术的发展，层出不穷的恶意软件攻击使得网络安全形势日趋严峻。恶意软件的数量和种类每年呈爆炸式增长，给个人财产安全、企业数据安全乃至国家网络安全造成了极大破坏。例如，2017年的WannaCry勒索病毒横扫全球，超过150个国家和地区的30万名用户和机器受到感染，造成的经济损失高达80亿美元。这些恶意软件通过使用加壳、混淆、反沙箱、对抗样本攻击等伪装技术来对抗检测。因此，如何有效地对恶意软件进行检测，一直是网络安全领域研究的重要课题之一。</p>
+<p>传统的恶意软件检测技术采用特征匹配的方式检测恶意软件，这类检测方法可以对已知的恶意软件进行有效的检测，但是无法实现对未知恶意软件的检测，尤其是恶意软件及其变种在数量和种类上呈现爆炸式增长的情况下，该类技术势必会导致检测效率下降。随着人工智能技术的日益发展，研究者们将其应用在恶意软件检测领域。本文将借助人工智能进行恶意软件检测的技术，统称为恶意软件智能分析技术。</p>
+<p>恶意软件智能分析技术能够有效缓解伪装技术带来的威胁，对恶意软件的加壳、混淆、反沙箱和对抗样本攻击都有较强的普适性和泛化能力，且能有效减少人工分析的人力成本。因此，对恶意软件开展智能分析技术的研究具有较高的应用价值。本文对智能分析技术在恶意软件检测上的应用成果进行总结与概括，形成如图1所示的恶意软件智能分析框架。该框架包括5个主要步骤：数据集构建、安全特征提取、安全特征处理、分类器选择、模型验证和性能评估。本文根据这5个步骤对恶意软件的智能分析技术进行逐一阐述。最后从不同层面上分析应用人工智能技术在恶意软件检测上所面临的一些挑战，以及提出未来的研究方向和发展趋势。另外，结合笔者的研究领域，本文仅针对Windows系统进行恶意软件智能分析技术相关的介绍工作。</p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="transform: rotate(0deg);-webkit-transform: rotate(0deg);-moz-transform: rotate(0deg);-o-transform: rotate(0deg);box-sizing: border-box;" viewBox="0  0 383 270"><svg style="overflow: initial;box-sizing: border-box;"><foreignObject height="100%" style="background-position: center center;background-repeat: no-repeat;background-size: cover;background-image: url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/iclynibMMTgBw2oL9s8mLX4ib3Oab5KSRoOULAKdwvOQI8SbqsEvzEglYlo8Lolt8vdicgdI76Efqt0h4Nsn8Dib6BQ/640?wx_fmt=jpeg&quot;);box-sizing: border-box;" width="100%"></foreignObject></svg></svg></p>
+<p><strong>图 1　恶意软件智能分析框架</strong></p>
+<p>✦  +</p>
+<ul>
+<li></li>
+</ul>
+<p><strong>1   数据集构建</strong>  </p>
+<p><strong>1.1　公开数据集</strong></p>
+<p>一些大型的组织和公司将其数据集进行了开源，即构建了一些公开数据集。但是出于对安全、隐私和版权的考虑，公开数据集都要进行相应的处理。比如，数据集只包含由可移植的可执行的 (Portable Executable，PE)文件提取的特征向量、分类标签和函数调用序列等。下面列举几个应用较多的公开数据集。</p>
+<p>EMBER数据集是EndGame公司在2018年发布的大型公开数据集。该数据集包括EMBER2017的110万个样本和EMBER2018的100万个样本。这两个阶段的样本均由恶意样本、良性样本、未知样本按照一定比例构成，样本文件以PE文件所提取的特征向量和它们的标签组成。BIG2015数据集由微软公司构建并发布。出于对安全的考虑，BIG2015数据集的头部文件均被去掉。样本数据由10 868个带恶意标签的软件和10 873个未带标签的恶意软件构成，且来源于9个不同的恶意软件家族。</p>
+<p>SoReL-20M数据集由网络安全公司Sophos和ReversingLabs于2020年12月14日联合发布。该数据集由2 000万Windows PE文件的元数据、标签和特征构成。该数据集是目前研究恶意软件检测的最大规模的数据集。</p>
+<p>kaggle平台恶意软件分类数据集由微软在2015年发布。该数据集包含将近500 GB大小的样本数据，分为9个恶意软件家族，共10 868个恶意软件样本。但出于安全方面的考虑，均去掉了PE头文件。</p>
+<p>阿里安全云于2018年发起了恶意软件检测挑战赛，并发布了用于比赛的数据集。该数据集的数据均为经过脱敏处理的Windows二进制可执行程序，数据量总计6亿条。</p>
+<p><strong>1.2　自建数据集</strong></p>
+<p>对于某些特殊的网络环境、工作需求，如需要追踪最新样本的变化趋势，往往还需要自行搜集恶意样本，一般采用部署蜜罐的方式进行诱捕。对于蜜罐系统的部署方式，网络上均有详细的操作方法，本文不再进行相关的介绍。</p>
+<p><strong>1.3　小　结</strong></p>
+<p>高质量恶意样本数据集的构建是保证智能分析模型具有良好表现的关键一环。总的来看，公开数据集的数据体量、家族种类和数据质量平衡性分布要优于自建数据集。但是出于某些特殊的研究和工作的目的，往往需要自行搜集和构建恶意软件样本，这也是实际工作应用场景中，恶意软件数据样本来源的主要方式。</p>
+<p>✦  +</p>
+<ul>
+<li></li>
+</ul>
+<p><strong>2　安全特征提取</strong>  </p>
+<p><strong>2.1　静态分析特征</strong></p>
+<p>静态分析特征是指在不运行待测恶意软件的情况下提取的安全特征，本节将从以下几个方面展开对静态分析特征的介绍。</p>
+<p>2.1.1　字节序列特征</p>
+<p>字节序列是一个程序字节级的组成单元，每个字节本身也包含了一定的信息，所以，对恶意软件进行字节序列特征提取，可以作为恶意软件的一种静态特征。这种静态特征就是按照一定的规则对待测程序进行字节级切分。</p>
+<p>对待测程序提取字节序列最常用的方法是使用n-gram模型。n-gram模型将待测程序按照大小为n的滑动窗口进行切分，进而得到一系列长度为n的字节序列，提取方式如图2所示。Schultz等人在2000年首度使用n-gram模型提取恶意软件的字节序列特征，并结合相关的机器学习算法检测基于Windows平台的恶意软件。该团队将提取的字节序列特征放在不同的分类器中进行训练，并和传统的基于特征的方法进行对比，最后实验表明该方法对恶意软件的检测效率提高了一倍。孙博文等人在2017年使用恶意软件的字节序列特征、操作码序列特征和PE头部信息进行静态特征融合，融合后的特征输入集成学习分类器，最终获得了良好的分类泛化能力。</p>
+<p>Raff等人将整个程序字节序列不进行切分，直接作为分类器的输入。他们使用词嵌入技术将整个程序字节转换为固定长度的向量，并以此来构建字节之间的语义关系，进一步采用卷积神经网络所提取的特征用于恶意软件的检测。</p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="transform: rotate(0deg);-webkit-transform: rotate(0deg);-moz-transform: rotate(0deg);-o-transform: rotate(0deg);box-sizing: border-box;" viewBox="0  0 383 211"><svg style="overflow: initial;box-sizing: border-box;"><foreignObject height="100%" style="background-position: center center;background-repeat: no-repeat;background-size: cover;background-image: url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/iclynibMMTgBw2oL9s8mLX4ib3Oab5KSRoOubSC8hcRfM9SQyKQ7ibptnJeibnRLfQwictIyYgFLhYCiaFicicpR1ULk6MQ/640?wx_fmt=jpeg&quot;);box-sizing: border-box;" width="100%"></foreignObject></svg></svg></p>
+<p><strong>图 2　3-gram 字节序列</strong></p>
+<p>2.1.2　可阅读字符串</p>
+<p>对于某些恶意软件而言，在其程序代码中可能会含有一些不变的可阅读字符串。如字符串“&lt;html&gt;&lt;script language&#x3D;‘javascript’&gt;window.open(‘readme.eml’)”常常会出现在Nimda蠕虫病毒中。虽然恶意软件可能会采取各种方法来改变自身的静态特征以此规避查杀，但是恶意软件本身所包含的可阅读字符串不可能完全发生变化。因此，恶意软件中包含的可阅读字符串可以作为分类器的一个输入特征。</p>
+<p>可以使用strings程序对恶意软件提取可阅读字符串。程序中的可阅读字符串通常是以ASCII或者Unicode编码格式进行存储，并以NULL结束符表示字符串的终结。Ye等人在2009年采用string程序对恶意软件进行可阅读字符串的提取，并以支持向量机(Suport Vector Machine，SVM)作为分类器对恶意软件进行检测。</p>
+<p>2.1.3　PE文件信息</p>
+<p>在Windows操作系统中，所有的可执行文件均为PE格式文件。PE文件由一系列结构和子组件构成，且包含了程序的一些重要属性。PE文件的某些字段在恶意软件样本和正常软件样本中存在较大的差异，因此PE文件信息可以作为鉴别恶意软件的一个关键特征。图3展示了PE文件的结构。</p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="transform: rotate(0deg);-webkit-transform: rotate(0deg);-moz-transform: rotate(0deg);-o-transform: rotate(0deg);box-sizing: border-box;" viewBox="0  0 383 329"><svg style="overflow: initial;box-sizing: border-box;"><foreignObject height="100%" style="background-position: center center;background-repeat: no-repeat;background-size: cover;background-image: url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/iclynibMMTgBw2oL9s8mLX4ib3Oab5KSRoONAkyfecdHneTac343naiaichKkYFcRcO2CwkVsTBsWy1xUTicNc7sCnSQ/640?wx_fmt=jpeg&quot;);box-sizing: border-box;" width="100%"></foreignObject></svg></svg></p>
+<p><strong>图 3　Windows 系统下 PE 文件的结构</strong></p>
+<p>Shafiq等人对恶意软件的PE文件信息做了细致化的提取工作，提取出来的特征高达189项，然后通过特征筛选进行恶意软件的检测。白金荣等人使用PE文件的依赖项来检测恶意软件，包括应用DLL的总数、导出表中符号的总数、应用程序编程接口(Application Programming Interface，API)的总数等，并在提取出特征后，使用随机森林对特征进行选择。Saxe等人基于卷积神经网络(Convolutional Neural Network，CNN)算法，通过静态分析PE文件信息、可阅读字符串、字节序列等特征，检测恶意软件。</p>
+<p>2.1.4　信息熵</p>
+<p>在信息论中，信息的不确定性采用信息熵进行度量。对于通过加密和加壳方式形成的恶意软件及其变种而言，它们的程序数据随机性往往比较高，即该类恶意软件的信息熵相较于正常软件比较高。因此，信息熵对于恶意软件的检测来说，是重要的特征之一。</p>
+<p>Saxe等人从恶意软件的二进制文件中提取字节信息熵和PE头文件等静态特征，在恶意软件的检测中取得了不错的效果。王垭通过信息熵和深度学习算法的应用，实现了对恶意软件检测中初始特征的筛查和深层特征的学习，并取得了良好的检测效果。Qu等人采用信息熵特征、操作码特征、API调用特征等多特征融合，并使用XGBoost、SVM等机器学习分类算法识别恶意软件。</p>
+<p>2.1.5　DDL相关信息</p>
+<p>基于Windows系统的恶意软件在发挥其破坏力的时候，往往会与系统文件、网络以及注册表等进行交互。在交互的过程中，恶意软件需要通过API从动态链接库(Dynamic Link Library，DLL)相关文件中导出交互过程所需要的功能函数。因此，在对恶意软件进行静态解析时，可以检查恶意软件所依赖的DDL相关信息，进一步了解其功能以及推测其可能执行的恶意行为。</p>
+<p>Schultz等人利用DLL相关信息、字符串和字节序列特征这3种静态特征生成布尔规则，对恶意软件进行分类。Baldangombo等人提出了一种基于多种特征融合的恶意软件检测系统，其中，特征包含恶意软件的DDL相关信息、PE文件信息和应用程序接口函数的信息，再通过多种机器学习的分类器实现恶意软件的检测分析。Bai等人提取了恶意软件的所有DDL相关信息，并对这些DDL信息进行筛选，保留其中最优的30个DDL信息作为输入特征。</p>
+<p><strong>2.2　动态分析特征</strong></p>
+<p>动态分析特征是指在运行待测恶意软件的情况下提取的安全特征。常用的做法是在安全可控的虚拟环境(如沙箱)中，运行恶意程序，在运行的过程中，恶意软件会产生大量的恶意动态行为特征，这些动态特征主要包括系统运行状态信息、系统操作信息和网络活动特征。</p>
+<p>2.2.1　系统运行状态信息</p>
+<p>恶意软件在实施恶意行为的过程中，运行环境的系统运行状态往往会表现出一些异常，如系统中央处理器(Central Processing Unit，CPU)情况、寄存器、内存使用率、进程运行数、磁盘使用情况等出现异常。比如，恶意代码在攻击或者传播的过程中，可能会在系统进程上嵌入新的进程，因此，可以将系统的进程变化信息作为恶意软件的一个分析特征。Burnap等人把恶意软件在运行时形成的系统CPU使用率、内存使用率、进程运行数和进程名、网络收发包数量等作为分类器的输入特征。</p>
+<p>2.2.2　系统操作信息</p>
+<p>操作系统的注册表包含了系统软件和应用软件的配置信息。恶意软件可以通过创建、修改、删除注册表以达到恶意攻击的目的。大部分的恶意软件在运行时会与运行环境中的文件产生交互行为，比如文件的添加、修改和删除等，可以通过捕获文件的状态变化来判断恶意软件的攻击意图。因此，注册表和系统文件的状态变化可以作为恶意软件检测的安全特征之一。Mohaisen等人将注册表和文件系统相关的修改操作作为恶意软件识别的特征。</p>
+<p>2.2.3　网络行为特征</p>
+<p>木马、蠕虫及僵尸网络这类恶意软件在传播的过程中会通过网络与控制端进行通信，包括文件下载、访问特定统一资源定位符(Uniform Resource Locator，URL)、发送搜集信息等恶意行为。因此，网络行为特征也是检测恶意软件的一个重要手段。Zhang等人通过提取目标机器的网络流量特征，来检测是否存在恶意软件。</p>
+<p><strong>2.3　动静混合分析特征</strong></p>
+<p>动静混合分析特征是指既可以在静态条件下获取，又可以在动态条件下获取的安全特征。这类安全特征包括操作码特征和API系统调用特征。</p>
+<p>2.3.1　操作码特征</p>
+<p>操作码是计算机程序的指令序列号，表示该程序需要进行的操作，这从本质上反映了程序的行为特征。对于同一家族的恶意软件而言，它们会共享同一个引擎，从操作码层面上来看，它们对被攻击者会有相似的恶意操作。因此，操作码可以作为恶意软件检测的一个安全特征。</p>
+<p>在提取操作码特征之前，需要先获取待测程序的反汇编指令。操作码特征既可以提取操作码的频率，又可以提取操作码的序列。</p>
+<p>针对操作码的频率的提取，Ye等人提取了操作码的频率作为恶意软件检测的安全特征，并以此作为基础，对操作码频率做了进一步的处理。Santos等人提出了用于检测未知病毒的基于操作码频率和操作码序列的检测方法，并使用不同的分类器来检测和分类恶意软件。</p>
+<p>针对操作码的序列的提取，Ding等人使用操作码序列作为样本特征，并使用深度信任网络作为分类器对恶意软件进行检测。陆中州使用操作码序列作为特征，并采用Grdient Boosting进行分类。</p>
+<p><strong>2.3.2　API系统调用特征</strong></p>
+<p>恶意软件在实施其攻击活动时，往往会调用一些敏感的系统API。比如有的恶意软件在对受控主机进行攻击时，需要进行提权操作，这时就需要系统的提权函数相关的API，如AdjustTokenPrivileges。因此，恶意软件在运行过程中的系统API调用信息，可以作为检测恶意软件的安全特征之一。</p>
+<p>Eskandari等人在静态条件下，通过恶意软件的程序控制流图(Control Flow Graph，CFG)提取了API系统调用特征用以检测恶意软件。Zhang等人使用2个神经网络对提取的恶意软件操作码特征和API系统调用特征进行训练，得到一个高阶特征，最后将高阶特征输入到一个新的分类器中，实验结果显示，高阶特征比单独使用操作码特征和API调用特征的检测效率更高。Rieck等人在动态条件下，利用恶意软件的API系统调用频率构建安全特征。</p>
+<p><strong>2.4　图像分析特征</strong></p>
+<p>目前大多数恶意软件的变种是通过自动生成工具或者重用一些重要模块形成的。因此，这些恶意软件家族的二进制代码具有一定的相似性。一个程序字节的取值范围和图像像素值的取值范围是一致的，都是0~255。对于恶意软件变种检测来说，类似于图像识别问题，前者基于软件相似性，而后者基于图像相似性。图4为3组恶意软件家族的灰度图像，从图像上看，同一家族的恶意软件的灰度图像的纹理具有很高的相似性，而不同家族恶意软件的灰度图像的纹理有比较大的差别。因此，通过恶意软件的图像纹理特征，可以实现变种恶意软件的分类检测。</p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="transform: rotate(0deg);-webkit-transform: rotate(0deg);-moz-transform: rotate(0deg);-o-transform: rotate(0deg);box-sizing: border-box;" viewBox="0  0 383 105"><svg style="overflow: initial;box-sizing: border-box;"><foreignObject height="100%" style="background-position: center center;background-repeat: no-repeat;background-size: cover;background-image: url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/iclynibMMTgBw2oL9s8mLX4ib3Oab5KSRoO0hxCEWO0o2V77zIibIpQiarcDgHQdfic45oWhibbSygibVRc1V3zLNibL3PQ/640?wx_fmt=jpeg&quot;);box-sizing: border-box;" width="100%"></foreignObject></svg></svg></p>
+<p><strong>图 4　不同恶意软件家族的灰度图像</strong></p>
+<p>Nataraj等人在2011年首次提出恶意软件图像的概念，该团队将恶意软件的二进制文件转换成对应的灰度图，并提取图像的通用搜索树(Generalized Search Tree，GIST)纹理特征，最后使用K-近邻 (K-Nearest Neighbor，KNN)算法对该特征进行分类。Su等人将恶意代码的二进制文件转换成灰度图像，并使用CNN算法对恶意软件进行检测分类。陆中州将恶意软件的可执行文件转化为灰度图像，并采用CNN方法对提取的图像特征进行分类处理，最终取得了良好的分类检测效果。</p>
+<p><strong>2.5　小　结</strong></p>
+<p>是否能对恶意软件的安全特征进行有效的提取，在很大程度上决定了恶意软件分类检测模型性能的优劣，因为这些关键特征是恶意软件的本质体现。不同恶意软件所表现出的安全特征各有不同，比如在动态特征方面，不同恶意软件的运行机制是不一样的，如勒索病毒在运行时，往往会调用大量的文件读写类函数和加密类函数的API；挖矿病毒在运行时，往往会开启大量的线程。因此，在针对不同恶意软件进行安全特征提取时，需要结合不同恶意软件的特点。此外，不同的安全特征各有利弊，在进行恶意软件智能分析时，往往需要融合多种特征，以达到最佳的分类检测效果。</p>
+<p>✦  +</p>
+<ul>
+<li></li>
+</ul>
+<p><strong>3　安全特征处理</strong>  </p>
+<p><strong>3.1　信息增益法</strong></p>
+<p>信息增益表示在某种条件下，信息不确定性减少的程度。对于恶意软件检测来说，信息增益可以用来表征某个安全特征对于分类的关键程度，更进一步地讲，即是根据它可以确定在什么层次上选择什么样的特征来分类。</p>
+<p>Zhao等人利用恶意软件的系统运行状态信息和API系统调用等行为特征来分类恶意软件，并采用信息增益法对采集的安全特征进行特征筛选。韩兰胜等人将API系统调用信息作为分类器的输入特征，并采用信息增益法对这些特征进行筛选。</p>
+<p><strong>3.2　PCA方法</strong></p>
+<p>主成分分析(Principal Component Analysis，PCA)方法是使用最为广泛的数据降维算法之一。该算法在保证原始信息不丢失的情况下，使用较少的数据维度来表征特征空间。对于恶意软件检测而言，PCA方法可以对初始特征进行特征降维、消除数据噪声和去除冗余特征。</p>
+<p>Baldangombo等人提出的静态恶意软件检测系统中，将PE文件信息、DDL相关信息和API系统调用信息作为安全特征，并使用信息增益法和PCA方法进行特征筛选和特征降维，最终采用多个机器学习的分类器实现恶意软件的分类检测。Siddiqui等人采用PCA方法对用于恶意软件检测的安全特征进行降维，把特征从877降到了146，降维效果非常明显。张吉昕采用PCA分析法对操作码特征和字节序列特征进行特征降维和特征优化，并采用CNN算法对恶意软件进行分类。</p>
+<p><strong>3.3　运用分类器处理特征</strong></p>
+<p>分类器不仅可以用于恶意软件的检测，还可以对安全特征进行特征筛选和特征降维。例如，在对安全特征进行筛选时，可以通过分类器准确率或基尼系数的下降程度来筛选出分类效果最好的安全特征。常用的分类器有随机森林算法、层叠降噪自编码器的深度学习算法等。</p>
+<p>Siddiqui等人对提取的安全特征采用随机森林模型进行特征筛选，在保证分类效果的前提下，将原始的特征数量从877降至84。白金荣等人使用PE文件信息、DDL相关信息和API系统调用信息来检测恶意软件，并使用随机森林对这些特征进行特征筛选。王垭采用层叠降噪自编码器的深度学习算法对提取的高维特征进行降维处理，在恶意软件检测的过程中，较大程度上降低了特征处理成本，并获得了较好的泛化能力。</p>
+<p><strong>3.4　embedding技术</strong></p>
+<p>嵌入(embedding)技术能够将离散变量转换为连续向量。embedding向量的一个重要性质是能够使距离相近的向量对应的物体有相近的含义。embedding技术的这一特性也可以应用于恶意软件的智能分析中。由于在直接使用程序字节作为恶意软件检测的安全特征时，无法利用字节值来衡量字节之间的语义关系；因此，可以利用embedding技术对程序字节进行特征处理。处理后的数据不仅维数较低，还可以体现出不同实体间的语义关系。目前embedding技术中应用得最为广泛的是google推出的word2vec技术，word2vec是一种基于训练浅层的前馈神经网络。Popov将word2vec技术用于机器码指令的向量嵌入，并采用CNN算法对恶意软件进行分类检测。Kang等人针对提取的恶意软件操作码序列和API系统调用特征采用word2vec技术进行特征处理，最后采用长短期记忆网络(LongShort-TermMemory，LSTM)算法对恶意软件进行分类检测。陆中州对恶意软件进行操作码特征的提取，并采用word2vec技术进行特征处理，最后使用GradientBoosting算法进行分类检测。</p>
+<p><strong>3.5　小结</strong></p>
+<p>安全特征处理的本质都是对特征进行精简，即在能够有效表征恶意软件的前提下，使特征的体量变小，从而降低后续的分类处理成本，进而使分类器达到最佳的分类效果。</p>
+<p>✦  +</p>
+<ul>
+<li></li>
+</ul>
+<p><strong>4　分类器选择</strong>  </p>
+<p><strong>4.1　机器学习分类器</strong></p>
+<p>4.1.1　K近邻算法</p>
+<p>K近邻算法(K-Nearest Neighbor，KNN)是一种有监督的机器学习算法，该算法的核心思想是给定一个训练数据集，对新的输入样本，基于某种距离度量找到该训练集中与其最近的k个训练样本，然后基于这k个邻居信息进行测试集的预测。由于K近邻算法被提出的时间较早，将该算法应用于恶意软件检测的相关工作也开始得较早。此外，该算法对于小规模的恶意软件数据集的检测效果表现良好，但是该算法在存取样本实例时需要占用巨大的内存空间，难以适用于大规模的数据集场景。</p>
+<p>Abou-Assaleh等人从恶意软件的可执行文件中提取特定的字节序列特征，并将该特征输入K近邻算法中进行分类检测。Nataraj等人将恶意软件的二进制文件转换成对应的灰度图，并提取图像的GIST纹理特征，最后使用K近邻算法对该特征进行分类。</p>
+<p>4.1.2　K-means算法</p>
+<p>K-means算法是一种无监督学习的聚类算法，该算法的核心思想是基于相似性将数据对象分为K个簇，进而进行分块聚类。K-means算法原理简单，收敛速度快，可解释性强，其中对K值的选取对聚类结果有很大的影响。因此在应用该算法进行恶意软件检测时，要选取合适的K值进行聚类。</p>
+<p>Ye等人提取了操作码的频率作为恶意软件检测的安全特征，并以此作为基础，采用K-means算法对恶意软件进行聚类。张莹使用K-means算法的变体PSO-K-means算法对恶意软件进行分类检测。</p>
+<p>4.1.3　SVM</p>
+<p>SVM是一种用于二分类的有监督机器学习算法，该算法的核心思想是建立一个最优决策超平面，使得该平面两侧距平面最近的两类样本之间的距离最大化，从而对分类问题提供良好的泛化能力。在恶意软件检测的应用上，该算法对数据量较少的数据集，可发挥出良好的分类效果，但是难以适用于大规模的数据场景。</p>
+<p>Ye等人对恶意软件进行可阅读字符串的提取，并以SVM作为分类器对恶意软件进行检测。Qu等人对恶意软件进行信息熵特征、操作码特征、API调用特征等多特征提取，并进一步进行特征融合，最后采用XGBoost、SVM等机器学习算法识别恶意软件。Kancherla等人提取恶意软件的灰度图像纹理特征，并使用SVM算法进行分类检测，分类准确率可达95%。</p>
+<p>4.1.4　决策树</p>
+<p>决策树是一种非参数的监督机器学习算法，该算法的核心思想是构建一种模型，使之能够从样本数据的特征属性中，通过简单的决策规则，预测目标变量的值。在恶意软件检测的应用方面，该算法相比于其他机器学习算法，计算开销相对较小且可解释性强，但是容易形成过拟合且难以适用于大规模的数据场景。</p>
+<p>Ravi等人对恶意软件提取操作码特征，并对其进行n-gram处理，最后使用决策树、K近邻算法和SVM算法进行分类检测。修扬等人将通过静态方式获取的操作码频率特征和通过动态方式获取的注册表行为、网络行为、文件操作等行为特征进行特征融合，并使用决策树、KNN和SVM算法对恶意软件进行分类检测。</p>
+<p><strong>4.2　深度学习分类器</strong></p>
+<p>4.2.1　CNN</p>
+<p>CNN是一种在计算机视觉领域有着广泛应用的神经网络模型。由于恶意软件家族的二进制代码具有一定的相似性，这种程序上的相似性可以与图像的相似性相类比和关联，这使得CNN算法可以应用于恶意软件的智能分析。此外，对于恶意软件所提取的安全特征，也可以直接作为CNN模型的输入数据。</p>
+<p>Su等人将恶意代码的二进制文件转换成灰度图像，并使用CNN算法对恶意软件进行检测分类。陆中州[28]将恶意软件的可执行文件转化为灰度图像，并采用CNN方法对提取的图像特征进行分类处理，最终取得了良好的分类检测效果。Saxe等人对恶意软件提取PE文件信息、可阅读字符串、字节序列特征等安全特征，并采用CNN算法对恶意软件进行检测。</p>
+<p>4.2.2　循环神经网络</p>
+<p>循环神经网络(Recurrent Neural Network，RNN)是一种在语言建模和语音识别等领域有着广泛应用的神经网络模型，该算法的核心思想是通过建立信息记忆存储功能，实现信息的自循环。对于计算机程序而言，程序代码与自然语言有一定的相似性，因此，RNN网络可以用于恶意软件的智能分析。</p>
+<p>Pascanu等人对恶意软件提取API系统调用特征，并以此作为RNN模型的输入。Wang等人提出了结合自编码器和RNN网络的恶意软件检测模型。Mathew等人对恶意软件提取API系统调用特征，并采用RNN的变体LSTM进行分类检测。</p>
+<p>4.2.3　BP神经网络</p>
+<p>反向传播(Back Propagation，BP)神经网络是一种应用广泛的多层前馈型神经网络模型，其核心原理是信号为前向传递，而误差会反向传播。BP神经网络在自学习、自适应、泛化和容错上拥有良好的表现。因此，将BP神经网络应用于恶意软件的检测领域，具有显著的优势。</p>
+<p>张一弛等人对恶意软件提取系统运行信息和系统操作信息等动态行为特征，并使用BP神经网络对恶意程序进行分类判定。张吉昕对恶意软件样本提取全局图特征，并采用BP神经网络对其进行分类检测。李倩倩利用n-gram模型对恶意软件提取操作码特征，再采用BP神经网络进行分类，准确率达到90%以上。</p>
+<p>4.2.4　图卷积神经网络</p>
+<p>图卷积神经网络(Graph Convolutional Network，GCN)是卷积神经网络在图域上进行自然推广的一种深度学习算法，该算法能够直接对图数据进行卷积运算。GCN相较于其他人工智能算法，在恶意软件的检测应用上还相对较少。目前，GCN算法主要结合所提取的恶意软件API调用特征进行恶意软件检测。</p>
+<p>Chai等人先通过CNN算法提取恶意软件的API序列特征，并据此构建API之间的行为图，然后将其输入到GCN模型中，进行分类检测。李煳桦将恶意软件的系统调用行为特征图结构作为GCN模型的输入，以此对恶意软件进行分类检测。</p>
+<p><strong>4.3　集成学习分类器</strong></p>
+<p>集成学习分类器本身并不是一个单独的分类器，而是通过某种结合策略将多个同质或者异质的基分类器构建成一个强学习器。由于集成学习分类器综合考虑了多个基学习器的特点，因此，能够实现较好的分类效果。</p>
+<p>4.3.1　随机森林</p>
+<p>随机森林是一种基于bagging的集成学习分类器，并以决策树为基分类器，以投票法为结合策略。</p>
+<p>Liu等人对恶意软件提取汇编指令，并对其进行降维处理，最后采用随机森林进行分类检测。Eskandari等人同时使用决策树和随机森林两种分类器对恶意软件进行分类检测。刘宇强提取恶意软件的图像纹理特征，并采用随机森林、K-means算法和CNN算法进行对比分类检测。</p>
+<p>4.3.2　GBDT、XGBoost和LightGBM</p>
+<p>梯度提升决策树(Gradient Boosting Decision Tree，GBDT)是一种基于boosting的集成学习算法。极端梯度提升树(Extreme Gradient Boosting，XGBoost)是GBDT算法的一种变种和工程实现。轻量级梯度提升机(Light Gradient Boosting Machine，LightGBM)是XGBoost的一种改进模型。因为这3种集成学习算法在分类问题和回归问题上均表现出色，所以被广泛应用于各种数据科学竞赛和工业实践中。</p>
+<p>张银杰等人采用随机森林和LightGBM算法对恶意软件进行了二分类预测，其预测效果明显好于传统的决策树算法。徐国天等人采用XGBoost和LightGBM双层模型对恶意软件进行分类检测。杨寒通过提取恶意软件的融合特征，采用LightGBM算法进行恶意软件的二分类检测。</p>
+<p><strong>4.4　小　结</strong></p>
+<p>在恶意软件的分类检测中，往往会采用多种分类器进行对比，并不断地通过模型调优，选择最优的分类器进行分类。每种算法模型都有其优势和劣势，需要根据数据样本集的大小、类型、特征提取的方法等具体场景进行择优选择，才能达到理想的分类效果。</p>
+<p>✦  +</p>
+<ul>
+<li></li>
+</ul>
+<p><strong>5　模型验证和性能评估</strong>  </p>
+<p><strong>5.1　模型验证</strong></p>
+<p>为了充分利用所获取的数据集，得到泛化能力良好的恶意软件分类器，在数据集样本量较大时，需要将样本数据随机分成3份，一份为训练集，一份为验证集，最后一份为测试集，根据实践经验，一般比例为6∶2∶2。首先用训练集来训练模型，得出模型的参数；其次用验证集来优化模型，寻找最优的超参数；最后把最终得到的模型再用于测试集，决定使用哪种模型，并评估模型的泛化性能。</p>
+<p>在数据集样本量不是很充足时，如果采用上述的数据划分策略，可能会出现在训练集上训练得到的模型表现良好，但是在测试集上的预测分类效果不尽如人意的情况，说明训练出的模型出现了过拟合，在未知数据上的泛化能力较差。为了从有限的数据集中获取尽可能多的信息，以及在一定程度上减小过拟合，可以对数据集采用交叉验证来训练优化模型。关于该方法的具体实现，本文不做详细的介绍。</p>
+<p><strong>5.2　性能评估</strong></p>
+<p>对分类器的分类效果和泛化能力进行评估，也是整个恶意软件智能分析过程中的重要一环。选择恰当的性能评估指标，研究者可以从评估结果中发现模型选择和训练过程潜在问题和缺陷，进而对模型的结构和参数进行优化。</p>
+<p>对于恶意软件二分类模型而言，其性能评估指标一般采用准确率、对数损失函数logloss和曲线下面积(Area Under Curve，AUC)。对于恶意软件多分类模型而言，其性能评估指标一般采用准确率、对数损失函数logloss、精确率、召回率和F1分数 (F1-Score)。每一个性能评估指标的具体含义和使用方法在本文不做详细的介绍。</p>
+<p><strong>5.3　小　结</strong></p>
+<p>构建分类器的目的在于得到泛化能力强的模型，即在未知数据样本上表现出良好的分类效果的模型。为了对泛化能力进行衡量，需要对数据样本进行训练集、验证集和测试集的划分，进而进行模型验证，并采用恰当的性能评估指标对分类器的分类效果进行评估。</p>
+<p>✦  +</p>
+<ul>
+<li></li>
+</ul>
+<p><strong>6　智能分析面临的挑战</strong>  </p>
+<p>随着智能分析技术在恶意软件检测上的广泛应用，其面临的问题和挑战也值得进行进一步的探究。</p>
+<p><strong>6.1　数据样本相关问题</strong></p>
+<p>6.1.1　数据样本现状问题</p>
+<p>对于Windows平台而言，网络安全方面的数据从来都不缺乏，但是由于数据大多会涉及个人隐私、法律法规以及数据安全等问题，因此公开数据集往往都要进行相应的处理。比如，某些数据集只包含由PE文件提取的特征向量、分类标签和函数调用序列等。所以，网络安全领域一直缺乏合适的公开数据集。并且，对于公开数据集来说，也存在很大的风险问题。比如，如果公开的数据集被黑客利用，他们对训练样本进行篡改，并不断调整其恶意代码功能，最终将导致识别模型的检测效果欠佳。此外，对于某些特殊的网络环境、工作需求，需要追踪最新样本的变化趋势，往往还需要自行收集和构建恶意软件样本，这也是实际工作应用场景中，恶意软件数据样本来源的主要方式。</p>
+<p>6.1.2　样本收集相关问题</p>
+<p>对于恶意软件样本的收集，一些常见的恶意软件样本，可以从相关的网站或者论坛上下载，或者采用蜜罐的方式进行收集。但是，有些恶意软件在检测到蜜罐存在时，会设法规避。此外，很多恶意软件是需要在特定环境下才会暴露其恶意行径，这就要求蜜罐系统具备相应的诱捕环境，这无疑提高了恶意样本收集的难度。</p>
+<p>目前，很多恶意软件为了规避检测，往往会对其进行加壳处理，而很多良性软件为了阻止商业对手的恶意破解，也会对其软件程序进行加壳。这样一来，如果分类器将加壳与否作为判定软件的一个特征，可能会造成最终结果的误判。</p>
+<p>6.1.3　数据样本标注问题</p>
+<p>大部分的恶意软件智能分析都是基于监督学习的，因此需要对样本数据进行标注，对于自建数据集来说，这是一件非常耗时的工作。目前采取的办法是将数据样本上传至打标签平台，比如VirusTotal，进行标签标注。一方面，VirusTotal包含很多反病毒引擎，不同的反病毒引擎都有各自的命名规则，这样会导致诸如恶意软件家族这类软件的标注信息各不相同；另一方面，该软件采取设置投票阈值的方式进行样本标注，对处于阈值边缘的待测程序的标注往往不准确。基于以上原因，会导致不恰当的数据样本标注，从而带来检测结果的误报和漏报。</p>
+<p>6.1.4　新型威胁样本问题</p>
+<p>目前还存在一些新型的威胁样本，比如广告嵌入类和约会诈骗类等软件。现阶段的恶意软件检测技术对这类软件的检测难以发挥作用。广告嵌入类软件，主要指软件本身功能为良性，但是该类软件内部与网络关联的链接中的相关内容可能存在恶意行为。约会欺诈类软件，与广告嵌入类软件类似，本身不具备恶意行为，在欺诈过程中，仅仅充当载体而已，但是该类软件会通过某种方式诱惑用户进行缴费聊天或者实施进一步的诈骗行为。</p>
+<p><strong>6.2　分析方法相关问题</strong></p>
+<p>6.2.1　静态分析局限性</p>
+<p>对恶意软件进行静态分析检测，其核心方法是对恶意软件进行反汇编和逆向工程，并进一步提取相应的静态分析特征。但是，很多恶意软件会使用伪装技术以此躲避静态分析检测。伪装技术一般包括对恶意软件进行加壳，资源混淆，采用动态加载数据方式等。以加壳伪装技术为例，对于加壳后的恶意软件，很难获得其反汇编代码，从而很难获得与静态分析检测相关的安全特征。</p>
+<p>6.2.2　动态分析局限性</p>
+<p>对恶意软件进行动态分析检测时，有些恶意软件会感知到运行环境中存在沙箱，便会隐藏其恶意行径。此外，对于需要回连远程服务器并等待发出命令的恶意软件，即使该类软件不做任何的抵抗尝试，如果回连服务器不发送任何命令，或者不再运行，那么该恶意软件的行为也将不会显现。其次，恶意软件的动态分析检测，需要消耗大量的计算资源，这也是其受限运用的一个因素。</p>
+<p>6.2.3　图像分析局限性</p>
+<p>对恶意软件进行图像分析检测，也存在一定的局限性。虽然程序上的相似性可以与图像的相似性相类比和关联，但是在程序转换为图片的过程中，存在信息冗余或信息丢失问题。由于输入分类器的图片需要大小固定，这必然要求程序在转换为对应的图片时，需要填充或者丢弃某些字节。这样一来，转换得到的图片相对于原程序而言，存在信息冗余或信息丢失的问题。此外，图像分析检测对于恶意软件的变种有着良好的检测效果，但是对于第一次出现的恶意软件检测效果欠佳，原因在于图像分析检测之所以能够实现，是基于同家族的软件样本具有相似特征。</p>
+<p><strong>6.3　信息丢失问题</strong></p>
+<p>一方面，虽然对高维的安全特征进行降维处理是必要的，但是特征降维可能会导致信息丢失问题，比如降维后数据方差减小。另一方面，采用图像分析技术对恶意软件进行检测，同样存在信息丢失的问题。</p>
+<p><strong>6.4　可解释差问题</strong></p>
+<p>大部分的智能分析方法仅仅根据输入的待测样本判定是否为恶意软件，但是，判定结果无法提供足够有效的信息去解释该判定结果的决策依据。尽管很多智能分析方法能够取得良好的检测效率，但是在真正的实际场景中应用较少，其中一个原因就在于结果可解释性差。对于安全分析人员而言，在缺乏决策依据的前提条件下，是否信任通过分类器得到的决策结果，也是值得思考的。</p>
+<p><strong>6.5　对抗样本攻击问题</strong></p>
+<p>虽然基于深度学习的恶意软件检测模型有着良好的检测效果，但是模型本身容易遭到对抗样本攻击。恶意软件开发者利用深度学习模型的弱点，对数据样本注入噪声，即通过修改部分特征，生成欺骗分类器的对抗样本，进而诱使分类器被训练成无法正确识别恶意软件的分类器，使得恶意样本被检测为良性样本，从而绕过分类器的检测。</p>
+<p><strong>6.6　小　结</strong></p>
+<p>本节主要介绍了恶意软件智能分析所面临的挑战和问题。对于这些存在的问题，目前已经有一些措施进行缓解，但仍无法彻底解决。</p>
+<p>(1)对于数据样本所面临的问题，在实际的应用场景中，数据样本的来源应以自建数据集为主，并将数据样本的收集作为一项长期的工作，以此完善和丰富用于训练的数据源，以增强分类器的泛化能力；在样本标注方面，出现难以判定的情况时，可以辅以专家经验进行判定；在新型威胁样本方面，这类软件的检测核心在于人与人之间的较量，可以辅以异常行为分析技术识别诈骗行为，在用户被欺骗前，及时进行提醒。</p>
+<p>(2)对于分析方法所面临的问题，由于静态分析检测和动态分析检测均存在相应的局限性，在实际的应用场景中，专业的安全分析人员应将两种分析方法结合应用，并辅以专业的人工分析，以达到可能的最佳效果。</p>
+<p>(3)对于信息丢失所面临的问题，在进行安全特征处理的过程中，尤其是进行特征降维时，难免造成信息丢失问题，因此在实际的应用中，降维程度和信息丢失需要达到一个平衡。</p>
+<p>(4)对于可解释性差所面临的问题，近两年，有不少的可解释性模型被提出，Ji等人在自己的综述论文中对相关的可解释性模型进行了总结。这些模型算法在图像识别和文本分类等领域应用较多，但是在恶意软件检测上能否发挥良好的效果还需要进一步的探索。</p>
+<p>(5)对于对抗样本攻击所面临的问题，已经普遍在现有的深度学习模型研究中有所涉及。目前针对对抗样本的检测方法有模型蒸馏技术和重训练技术，但是这两种方法只能对有限的对抗样本进行有效的检测。至于在恶意软件的智能分析领域，还没有相关的研究工作。</p>
+<p>✦  +</p>
+<ul>
+<li></li>
+</ul>
+<p><strong>7　总结与展望</strong>  </p>
+<p>本文对人工智能技术在恶意软件检测上的研究进展和面临的挑战进行了相应的回顾和综述。恶意软件的智能分析大体上围绕着数据集构建、安全特征提取、安全特征处理、分类器选择、模型验证和性能评估这5方面进行。另外，对于恶意软件检测所面临的挑战和问题，也做了相应的梳理，在此，针对所面临的挑战，对一些潜在的研究方向进行展望，具体如下：</p>
+<p>(1)数据集方面。目前可以用于实际应用场景的数据集较少，在未来的工作中，将构建更有价值的数据集纳入到恶意软件智能分析的整个工作环节中是非常必要的。</p>
+<p>(2)图像分析检测方面。可以将恶意软件的动态特征也转化为图像特征，具体而言，提取内存原始数据，将其转化为图片，并采用深度学习算法进行分类器构建。这种方法可以弥补图像分析方法的不足。</p>
+<p>(3)结果可解释方面。如何有效地提高恶意软件智能分析模型的可解释性，并解决安全分析人员和决策结果的信任问题，是未来恶意软件检测领域中值得深入探究的方向之一。</p>
+<p>(4)对抗样本攻击方面。对抗样本攻击的出现使得基于深度学习的恶意检测模型本身存在安全隐患，因此在未来的研究工作中，提出有效的防御方法来提高模型的鲁棒性是很有必要的。</p>
+<p>总体而言，人工智能技术在恶意软件检测上的应用取得了一些令人瞩目的研究成果，但是这些研究成果在实际场景中的应用还存在一定的局限性。因此，如何充分利用人工智能技术在恶意软件检测上的优势，迫切需要相关技术研究人员和安全分析人员一起进行深入探究。</p>
+<p>+ + + + + + + + + + + </p>
+<p><strong>引用本文：</strong>武强，苗彦涛，余尚仁 . 基于智能分析的恶意软件检测研究进展和挑战 [J]. 通信技术 ,2022,55(9):1183-1195.</p>
+<p>+ + + + + </p>
+<p><strong>作者简介 &gt;&gt;&gt;</strong></p>
+<p><strong>武  强</strong>，男，硕士，工程师，主要研究方向为网络安全，机器学习；<strong>苗彦涛</strong>，男，硕士，工程师，主要研究方向为网络安全和新一代通信网络技术；<strong>余尚仁</strong>，硕士，工程师，主要研究方向为关键基础设施网络安全。<strong>选自《通信技术》2022年第9期(为便于排版，已省去参考文献）</strong></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">阿泽</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://rongzhiy.github.io/2022/10/20/%E5%9F%BA%E4%BA%8E%E6%99%BA%E8%83%BD%E5%88%86%E6%9E%90%E7%9A%84%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E6%A3%80%E6%B5%8B%E7%A0%94%E7%A9%B6%E8%BF%9B%E5%B1%95%E5%92%8C%E6%8C%91%E6%88%98/">https://rongzhiy.github.io/2022/10/20/基于智能分析的恶意软件检测研究进展和挑战/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://rongzhiy.github.io" target="_blank">Rongzhiyのblog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/10/20/Elasticsearch%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Elasticsearch技术分析</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">阿泽</div><div class="author-info__description">Stay Hungry,Stay Foolish</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/rongzhiy"><i class="fab fa-github"></i><span>github</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/rongzhiy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:rongzhiy2735@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/10/20/%E5%9F%BA%E4%BA%8E%E6%99%BA%E8%83%BD%E5%88%86%E6%9E%90%E7%9A%84%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E6%A3%80%E6%B5%8B%E7%A0%94%E7%A9%B6%E8%BF%9B%E5%B1%95%E5%92%8C%E6%8C%91%E6%88%98/" title="基于智能分析的恶意软件检测研究进展和挑战"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于智能分析的恶意软件检测研究进展和挑战"/></a><div class="content"><a class="title" href="/2022/10/20/%E5%9F%BA%E4%BA%8E%E6%99%BA%E8%83%BD%E5%88%86%E6%9E%90%E7%9A%84%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E6%A3%80%E6%B5%8B%E7%A0%94%E7%A9%B6%E8%BF%9B%E5%B1%95%E5%92%8C%E6%8C%91%E6%88%98/" title="基于智能分析的恶意软件检测研究进展和挑战">基于智能分析的恶意软件检测研究进展和挑战</a><time datetime="2022-10-20T12:37:43.000Z" title="发表于 2022-10-20 20:37:43">2022-10-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/20/Elasticsearch%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/" title="Elasticsearch技术分析"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Elasticsearch技术分析"/></a><div class="content"><a class="title" href="/2022/10/20/Elasticsearch%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/" title="Elasticsearch技术分析">Elasticsearch技术分析</a><time datetime="2022-10-20T12:28:33.000Z" title="发表于 2022-10-20 20:28:33">2022-10-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/11/%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%91%E5%8E%9F%E7%94%9F%EF%BC%9F/" title="什么是云原生？"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="什么是云原生？"/></a><div class="content"><a class="title" href="/2022/10/11/%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%91%E5%8E%9F%E7%94%9F%EF%BC%9F/" title="什么是云原生？">什么是云原生？</a><time datetime="2022-10-11T03:58:11.000Z" title="发表于 2022-10-11 11:58:11">2022-10-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/10/%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB%E6%A8%A1%E5%9E%8BSOTA/" title="文本分类模型SOTA"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="文本分类模型SOTA"/></a><div class="content"><a class="title" href="/2022/10/10/%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB%E6%A8%A1%E5%9E%8BSOTA/" title="文本分类模型SOTA">文本分类模型SOTA</a><time datetime="2022-10-10T15:32:44.000Z" title="发表于 2022-10-10 23:32:44">2022-10-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/10/go%E8%AF%AD%E8%A8%80%E5%8E%86%E5%8F%B2/" title="go语言历史"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="go语言历史"/></a><div class="content"><a class="title" href="/2022/10/10/go%E8%AF%AD%E8%A8%80%E5%8E%86%E5%8F%B2/" title="go语言历史">go语言历史</a><time datetime="2022-10-10T04:47:57.000Z" title="发表于 2022-10-10 12:47:57">2022-10-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022  <i id="heartbeat" class="fa fas fa-heartbeat"></i> 阿泽</div><div class="framework-info"><span>框架 </span><a href="">Hexo</a></div></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer src="https://npm.elemecdn.com/jquery@latest/dist/jquery.min.js"></script><script defer data-pjax src="/js/cat.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
