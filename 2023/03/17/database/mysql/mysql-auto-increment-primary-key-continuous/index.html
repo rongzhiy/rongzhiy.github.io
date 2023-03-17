@@ -1,0 +1,271 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><div id="myscoll"></div><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MySQL自增主键一定是连续的吗 | Rongzhiyのblog</title><meta name="keywords" content="MySQL,大厂面试"><meta name="author" content="阿泽"><meta name="copyright" content="阿泽"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="作者：飞天小牛肉 原文：https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;qci10h9rJx_COZbHV3aygQ  众所周知，自增主键可以让聚集索引尽量地保持递增顺序插入，避免了随机查询，从而提高了查询效率。 但实际上，MySQL 的自增主键并不能保证一定是连续递增的。 下面举个例子来看下，如下所示创建一张表：  自增值保存在哪里？使用 insert into test_pk valu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL自增主键一定是连续的吗">
+<meta property="og:url" content="https://rongzhiy.github.io/2023/03/17/database/mysql/mysql-auto-increment-primary-key-continuous/index.html">
+<meta property="og:site_name" content="Rongzhiyのblog">
+<meta property="og:description" content="作者：飞天小牛肉 原文：https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;qci10h9rJx_COZbHV3aygQ  众所周知，自增主键可以让聚集索引尽量地保持递增顺序插入，避免了随机查询，从而提高了查询效率。 但实际上，MySQL 的自增主键并不能保证一定是连续递增的。 下面举个例子来看下，如下所示创建一张表：  自增值保存在哪里？使用 insert into test_pk valu">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2023-03-17T08:59:52.101Z">
+<meta property="article:modified_time" content="2023-03-16T07:55:48.000Z">
+<meta property="article:author" content="阿泽">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="大厂面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://rongzhiy.github.io/2023/03/17/database/mysql/mysql-auto-increment-primary-key-continuous/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-16 15:55:48'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/cat.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">223</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">23</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Rongzhiyのblog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">MySQL自增主键一定是连续的吗</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-17T08:59:52.101Z" title="发表于 2023-03-17 16:59:52">2023-03-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-16T07:55:48.000Z" title="更新于 2023-03-16 15:55:48">2023-03-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="MySQL自增主键一定是连续的吗"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><blockquote>
+<p>作者：飞天小牛肉</p>
+<p>原文：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/qci10h9rJx_COZbHV3aygQ">https://mp.weixin.qq.com/s/qci10h9rJx_COZbHV3aygQ</a></p>
+</blockquote>
+<p>众所周知，自增主键可以让聚集索引尽量地保持递增顺序插入，避免了随机查询，从而提高了查询效率。</p>
+<p>但实际上，MySQL 的自增主键并不能保证一定是连续递增的。</p>
+<p>下面举个例子来看下，如下所示创建一张表：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3e6b80ba50cb425386b80924e3da0d23~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h2 id="自增值保存在哪里？"><a href="#自增值保存在哪里？" class="headerlink" title="自增值保存在哪里？"></a>自增值保存在哪里？</h2><p>使用 <code>insert into test_pk values(null, 1, 1)</code> 插入一行数据，再执行 <code>show create table</code> 命令来看一下表的结构定义：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c17e46230bd34150966f0d86b2ad5e91~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>上述表的结构定义存放在后缀名为 <code>.frm</code> 的本地文件中，在 MySQL 安装目录下的 data 文件夹下可以找到这个 <code>.frm</code> 文件：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3ec0514dd7be423d80b9e7f2d52f5902~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>从上述表结构可以看到，表定义里面出现了一个 <code>AUTO_INCREMENT=2</code>，表示下一次插入数据时，如果需要自动生成自增值，会生成 id &#x3D; 2。</p>
+<p>但需要注意的是，自增值并不会保存在这个表结构也就是 <code>.frm</code> 文件中，不同的引擎对于自增值的保存策略不同：</p>
+<p>1）MyISAM 引擎的自增值保存在数据文件中</p>
+<p>2）InnoDB 引擎的自增值，其实是保存在了内存里，并没有持久化。第一次打开表的时候，都会去找自增值的最大值 <code>max(id)</code>，然后将 <code>max(id)+1</code> 作为这个表当前的自增值。</p>
+<p>举个例子：我们现在表里当前数据行里最大的 id 是 1，AUTO_INCREMENT&#x3D;2，对吧。这时候，我们删除 id&#x3D;1 的行，AUTO_INCREMENT 还是 2。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/61b8dc9155624044a86d91c368b20059~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>但如果马上重启 MySQL 实例，重启后这个表的 AUTO_INCREMENT 就会变成 1。﻿也就是说，MySQL 重启可能会修改一个表的 AUTO_INCREMENT 的值。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/27fdb15375664249a31f88b64e6e5e66~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dee15f93e65d44d384345a03404f3481~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>以上，是在我本地 MySQL 5.x 版本的实验，实际上，<strong>到了 MySQL 8.0 版本后，自增值的变更记录被放在了 redo log 中，提供了自增值持久化的能力</strong> ，也就是实现了“如果发生重启，表的自增值可以根据 redo  log 恢复为 MySQL 重启前的值”</p>
+<p>也就是说对于上面这个例子来说，重启实例后这个表的 AUTO_INCREMENT 仍然是 2。</p>
+<p>理解了 MySQL 自增值到底保存在哪里以后，我们再来看看自增值的修改机制，并以此引出第一种自增值不连续的场景。</p>
+<h2 id="自增值不连续的场景"><a href="#自增值不连续的场景" class="headerlink" title="自增值不连续的场景"></a>自增值不连续的场景</h2><h3 id="自增值不连续场景-1"><a href="#自增值不连续场景-1" class="headerlink" title="自增值不连续场景 1"></a>自增值不连续场景 1</h3><p>在 MySQL 里面，如果字段 id 被定义为 AUTO_INCREMENT，在插入一行数据的时候，自增值的行为如下：</p>
+<ul>
+<li>如果插入数据时 id 字段指定为 0、null 或未指定值，那么就把这个表当前的 AUTO_INCREMENT 值填到自增字段；</li>
+<li>如果插入数据时 id 字段指定了具体的值，就直接使用语句里指定的值。</li>
+</ul>
+<p>根据要插入的值和当前自增值的大小关系，自增值的变更结果也会有所不同。假设某次要插入的值是 <code>insert_num</code>，当前的自增值是 <code>autoIncrement_num</code>：</p>
+<ul>
+<li>如果 <code>insert_num &lt; autoIncrement_num</code>，那么这个表的自增值不变</li>
+<li>如果 <code>insert_num &gt;= autoIncrement_num</code>，就需要把当前自增值修改为新的自增值</li>
+</ul>
+<p>也就是说，如果插入的 id 是 100，当前的自增值是 90，<code>insert_num &gt;= autoIncrement_num</code>，那么自增值就会被修改为新的自增值即 101</p>
+<p>一定是这样吗？</p>
+<p>非也~</p>
+<p>了解过分布式 id 的小伙伴一定知道，为了避免两个库生成的主键发生冲突，我们可以让一个库的自增 id 都是奇数，另一个库的自增 id 都是偶数</p>
+<p>这个奇数偶数其实是通过 <code>auto_increment_offset</code> 和 <code>auto_increment_increment</code> 这两个参数来决定的，这俩分别用来表示自增的初始值和步长，默认值都是 1。</p>
+<p>所以，上面的例子中生成新的自增值的步骤实际是这样的：从 <code>auto_increment_offset</code> 开始，以 <code>auto_increment_increment</code> 为步长，持续叠加，直到找到第一个大于 100  的值，作为新的自增值。</p>
+<p>所以，这种情况下，自增值可能会是 102，103 等等之类的，就会导致不连续的主键 id。</p>
+<p>更遗憾的是，即使在自增初始值和步长这两个参数都设置为 1 的时候，自增主键 id 也不一定能保证主键是连续的</p>
+<h3 id="自增值不连续场景-2"><a href="#自增值不连续场景-2" class="headerlink" title="自增值不连续场景 2"></a>自增值不连续场景 2</h3><p>举个例子，我们现在往表里插入一条 (null,1,1) 的记录，生成的主键是 1，AUTO_INCREMENT&#x3D; 2，对吧</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c22c4f2cea234c7ea496025eb826c3bc~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>这时我再执行一条插入 <code>(null,1,1)</code> 的命令，很显然会报错 <code>Duplicate entry</code>，因为我们设置了一个唯一索引字段 <code>a</code>：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c0325e31398d4fa6bb1cbe08ef797b7f~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>但是，你会惊奇的发现，虽然插入失败了，但自增值仍然从 2 增加到了 3！</p>
+<p>这是为啥？</p>
+<p>我们来分析下这个 insert 语句的执行流程：</p>
+<ol>
+<li>执行器调用 InnoDB 引擎接口准备插入一行记录 (null,1,1);</li>
+<li>InnoDB 发现用户没有指定自增 id 的值，则获取表 <code>test_pk</code> 当前的自增值 2；</li>
+<li>将传入的记录改成 (2,1,1);</li>
+<li>将表的自增值改成 3；</li>
+<li>继续执行插入数据操作，由于已经存在 a&#x3D;1 的记录，所以报 Duplicate key error，语句返回</li>
+</ol>
+<p>可以看到，自增值修改的这个操作，是在真正执行插入数据的操作之前。</p>
+<p>这个语句真正执行的时候，因为碰到唯一键 a 冲突，所以 id &#x3D; 2 这一行并没有插入成功，但也没有将自增值再改回去。所以，在这之后，再插入新的数据行时，拿到的自增 id 就是 3。也就是说，出现了自增主键不连续的情况。</p>
+<p>至此，我们已经罗列了两种自增主键不连续的情况：</p>
+<ol>
+<li>自增初始值和自增步长设置不为 1</li>
+<li>唯一键冲突</li>
+</ol>
+<p>除此之外，事务回滚也会导致这种情况</p>
+<h3 id="自增值不连续场景-3"><a href="#自增值不连续场景-3" class="headerlink" title="自增值不连续场景 3"></a>自增值不连续场景 3</h3><p>我们现在表里有一行 <code>(1,1,1)</code> 的记录，AUTO_INCREMENT &#x3D; 3：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6220fcf7dac54299863e43b6fb97de3e~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>我们先插入一行数据 <code>(null, 2, 2)</code>，也就是 (3, 2, 2) 嘛，并且 AUTO_INCREMENT 变为 4：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3f02d46437d643c3b3d9f44a004ab269~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>再去执行这样一段 SQL：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/faf5ce4a2920469cae697f845be717f5~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>虽然我们插入了一条 (null, 3, 3) 记录，但是使用 rollback 进行回滚了，所以数据库中是没有这条记录的：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6cb4c02722674dd399939d3d03a431c1~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>在这种事务回滚的情况下，自增值并没有同样发生回滚！如下图所示，自增值仍然固执地从 4 增加到了 5：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e6eea1c927424ac7bda34a511ca521ae~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>所以这时候我们再去插入一条数据（null, 3, 3）的时候，主键 id 就会被自动赋为 <code>5</code> 了：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/80da69dd13b543c4a32d6ed832a3c568~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>那么，为什么在出现唯一键冲突或者回滚的时候，MySQL 没有把表的自增值改回去呢？回退回去的话不就不会发生自增 id 不连续了吗？</p>
+<p>事实上，这么做的主要原因是为了提高性能。</p>
+<p>我们直接用反证法来验证：假设 MySQL 在事务回滚的时候会把自增值改回去，会发生什么？</p>
+<p>现在有两个并行执行的事务 A 和 B，在申请自增值的时候，为了避免两个事务申请到相同的自增 id，肯定要加锁，然后顺序申请，对吧。</p>
+<ol>
+<li>假设事务 A 申请到了 id &#x3D; 1， 事务 B 申请到 id&#x3D;2，那么这时候表 t 的自增值是3，之后继续执行。</li>
+<li>事务 B 正确提交了，但事务 A 出现了唯一键冲突，也就是 id &#x3D; 1 的那行记录插入失败了，那如果允许事务 A 把自增 id 回退，也就是把表的当前自增值改回 1，那么就会出现这样的情况：表里面已经有 id &#x3D; 2 的行，而当前的自增 id 值是 1。</li>
+<li>接下来，继续执行的其他事务就会申请到 id&#x3D;2。这时，就会出现插入语句报错“主键冲突”。</li>
+</ol>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5f26f02e60f643c9a7cab88a9f1bdce9~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>而为了解决这个主键冲突，有两种方法：</p>
+<ol>
+<li>每次申请 id 之前，先判断表里面是否已经存在这个 id，如果存在，就跳过这个 id</li>
+<li>把自增 id 的锁范围扩大，必须等到一个事务执行完成并提交，下一个事务才能再申请自增 id</li>
+</ol>
+<p>很显然，上述两个方法的成本都比较高，会导致性能问题。而究其原因呢，是我们假设的这个 “允许自增 id 回退”。</p>
+<p>因此，InnoDB 放弃了这个设计，语句执行失败也不回退自增 id。也正是因为这样，所以才只保证了自增 id 是递增的，但不保证是连续的。</p>
+<p>综上，已经分析了三种自增值不连续的场景，还有第四种场景：批量插入数据。</p>
+<h3 id="自增值不连续场景-4"><a href="#自增值不连续场景-4" class="headerlink" title="自增值不连续场景 4"></a>自增值不连续场景 4</h3><p>对于批量插入数据的语句，MySQL 有一个批量申请自增 id 的策略：</p>
+<ol>
+<li>语句执行过程中，第一次申请自增 id，会分配 1 个；</li>
+<li>1 个用完以后，这个语句第二次申请自增 id，会分配 2 个；</li>
+<li>2 个用完以后，还是这个语句，第三次申请自增 id，会分配 4 个；</li>
+<li>依此类推，同一个语句去申请自增 id，每次申请到的自增 id 个数都是上一次的两倍。</li>
+</ol>
+<p>注意，这里说的批量插入数据，不是在普通的 insert 语句里面包含多个 value 值！！！，因为这类语句在申请自增 id 的时候，是可以精确计算出需要多少个 id 的，然后一次性申请，申请完成后锁就可以释放了。</p>
+<p>而对于 <code>insert … select</code>、replace … select 和 load data 这种类型的语句来说，MySQL 并不知道到底需要申请多少 id，所以就采用了这种批量申请的策略，毕竟一个一个申请的话实在太慢了。</p>
+<p>举个例子，假设我们现在这个表有下面这些数据：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6453cfc107f94e3bb86c95072d443472~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>我们创建一个和当前表 <code>test_pk</code> 有相同结构定义的表 <code>test_pk2</code>：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/45248a6dc34f431bba14d434bee2c79e~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>然后使用 <code>insert...select</code> 往 <code>teset_pk2</code> 表中批量插入数据：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c1b061e86bae484694d15ceb703b10ca~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>可以看到，成功导入了数据。</p>
+<p>再来看下 <code>test_pk2</code> 的自增值是多少：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0ff9039366154c738331d64ebaf88d3b~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>如上分析，是 8 而不是 6</p>
+<p>具体来说，insert…select 实际上往表中插入了 5 行数据 （1 1）（2 2）（3 3）（4 4）（5 5）。但是，这五行数据是分三次申请的自增 id，结合批量申请策略，每次申请到的自增 id 个数都是上一次的两倍，所以：</p>
+<ul>
+<li>第一次申请到了一个 id：id&#x3D;1</li>
+<li>第二次被分配了两个 id：id&#x3D;2 和 id&#x3D;3</li>
+<li>第三次被分配到了 4 个 id：id&#x3D;4、id &#x3D; 5、id &#x3D; 6、id&#x3D;7</li>
+</ul>
+<p>由于这条语句实际只用上了 5 个 id，所以 id&#x3D;6 和 id&#x3D;7 就被浪费掉了。之后，再执行 <code>insert into test_pk2 values(null,6,6)</code>，实际上插入的数据就是（8,6,6)：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/51612fbac3804cff8c5157df21d6e355~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文总结下自增值不连续的 4 个场景：</p>
+<ol>
+<li>自增初始值和自增步长设置不为 1</li>
+<li>唯一键冲突</li>
+<li>事务回滚</li>
+<li>批量插入（如 <code>insert...select</code> 语句）</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">阿泽</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://rongzhiy.github.io/2023/03/17/database/mysql/mysql-auto-increment-primary-key-continuous/">https://rongzhiy.github.io/2023/03/17/database/mysql/mysql-auto-increment-primary-key-continuous/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://rongzhiy.github.io" target="_blank">Rongzhiyのblog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a><a class="post-meta__tags" href="/tags/%E5%A4%A7%E5%8E%82%E9%9D%A2%E8%AF%95/">大厂面试</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/03/17/database/mysql/mysql-high-performance-optimization-specification-recommendations/"><img class="prev-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">MySQL高性能优化规范建议总结</div></div></a></div><div class="next-post pull-right"><a href="/2023/03/17/database/mysql/innodb-implementation-of-mvcc/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">InnoDB存储引擎对MVCC的实现</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/03/17/database/mysql/mysql-questions-01/" title="MySQL常见面试题总结"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">MySQL常见面试题总结</div></div></a></div><div><a href="/2023/03/17/database/mysql/how-sql-executed-in-mysql/" title="SQL语句在MySQL中的执行过程"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">SQL语句在MySQL中的执行过程</div></div></a></div><div><a href="/2023/03/17/database/mysql/a-thousand-lines-of-mysql-study-notes/" title="一千行 MySQL 学习笔记"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">一千行 MySQL 学习笔记</div></div></a></div><div><a href="/2023/03/17/database/mysql/index-invalidation-caused-by-implicit-conversion/" title="MySQL隐式转换造成索引失效"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">MySQL隐式转换造成索引失效</div></div></a></div><div><a href="/2023/03/17/database/mysql/innodb-implementation-of-mvcc/" title="InnoDB存储引擎对MVCC的实现"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">InnoDB存储引擎对MVCC的实现</div></div></a></div><div><a href="/2023/03/17/database/mysql/mysql-index/" title="MySQL索引详解"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">MySQL索引详解</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">阿泽</div><div class="author-info__description">Stay Hungry,Stay Foolish</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">223</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">23</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/rongzhiy"><i class="fab fa-github"></i><span>github</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/rongzhiy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:rongzhiy2735@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%A2%9E%E5%80%BC%E4%BF%9D%E5%AD%98%E5%9C%A8%E5%93%AA%E9%87%8C%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">自增值保存在哪里？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%A2%9E%E5%80%BC%E4%B8%8D%E8%BF%9E%E7%BB%AD%E7%9A%84%E5%9C%BA%E6%99%AF"><span class="toc-number">2.</span> <span class="toc-text">自增值不连续的场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%A2%9E%E5%80%BC%E4%B8%8D%E8%BF%9E%E7%BB%AD%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.1.</span> <span class="toc-text">自增值不连续场景 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%A2%9E%E5%80%BC%E4%B8%8D%E8%BF%9E%E7%BB%AD%E5%9C%BA%E6%99%AF-2"><span class="toc-number">2.2.</span> <span class="toc-text">自增值不连续场景 2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%A2%9E%E5%80%BC%E4%B8%8D%E8%BF%9E%E7%BB%AD%E5%9C%BA%E6%99%AF-3"><span class="toc-number">2.3.</span> <span class="toc-text">自增值不连续场景 3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%A2%9E%E5%80%BC%E4%B8%8D%E8%BF%9E%E7%BB%AD%E5%9C%BA%E6%99%AF-4"><span class="toc-number">2.4.</span> <span class="toc-text">自增值不连续场景 4</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">小结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/maven/maven-core-concepts/" title="Maven 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Maven 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/maven/maven-core-concepts/" title="Maven 核心概念总结">Maven 核心概念总结</a><time datetime="2023-03-17T09:00:32.696Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/gradle/gradle-core-concepts/" title="Gradle 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gradle 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/gradle/gradle-core-concepts/" title="Gradle 核心概念总结">Gradle 核心概念总结</a><time datetime="2023-03-17T09:00:32.691Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/git/github-tips/" title="Github 实用小技巧总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Github 实用小技巧总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/git/github-tips/" title="Github 实用小技巧总结">Github 实用小技巧总结</a><time datetime="2023-03-17T09:00:32.687Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/git/git-intro/" title="Git 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/git/git-intro/" title="Git 核心概念总结">Git 核心概念总结</a><time datetime="2023-03-17T09:00:32.685Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/docker/docker-intro/" title="Docker 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Docker 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/docker/docker-intro/" title="Docker 核心概念总结">Docker 核心概念总结</a><time datetime="2023-03-17T09:00:32.681Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023  <i id="heartbeat" class="fa fas fa-heartbeat"></i> 阿泽</div><div class="framework-info"><span>框架 </span><a href="">Hexo</a></div></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer src="https://npm.elemecdn.com/jquery@latest/dist/jquery.min.js"></script><script defer data-pjax src="/js/cat.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

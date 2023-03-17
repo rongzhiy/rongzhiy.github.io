@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><div id="myscoll"></div><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rongzhiyのblog | Rongzhiyのblog</title><meta name="keywords" content="数据结构"><meta name="author" content="阿泽"><meta name="copyright" content="阿泽"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="堆什么是堆堆是一种满足以下条件的树： 堆中的每一个节点值都大于等于（或小于等于）子树中所有节点的值。或者说，任意一个节点的值都大于等于（或小于等于）所有子节点的值。  大家可以把堆(最大堆)理解为一个公司,这个公司很公平,谁能力强谁就当老大,不存在弱的人当老大,老大手底下的人一定不会比他强。这样有助于理解后续堆的操作。  !!!特别提示：  很多博客说堆是完全二叉树，其实并非如此，堆不一定是完全二">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rongzhiyのblog">
+<meta property="og:url" content="https://rongzhiy.github.io/2023/03/17/cs-basics/data-structure/heap/index.html">
+<meta property="og:site_name" content="Rongzhiyのblog">
+<meta property="og:description" content="堆什么是堆堆是一种满足以下条件的树： 堆中的每一个节点值都大于等于（或小于等于）子树中所有节点的值。或者说，任意一个节点的值都大于等于（或小于等于）所有子节点的值。  大家可以把堆(最大堆)理解为一个公司,这个公司很公平,谁能力强谁就当老大,不存在弱的人当老大,老大手底下的人一定不会比他强。这样有助于理解后续堆的操作。  !!!特别提示：  很多博客说堆是完全二叉树，其实并非如此，堆不一定是完全二">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2023-03-17T08:59:51.577Z">
+<meta property="article:modified_time" content="2023-03-16T07:55:48.000Z">
+<meta property="article:author" content="阿泽">
+<meta property="article:tag" content="数据结构">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://rongzhiy.github.io/2023/03/17/cs-basics/data-structure/heap/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-16 15:55:48'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/cat.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">223</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">23</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Rongzhiyのblog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">无题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-17T08:59:51.577Z" title="发表于 2023-03-17 16:59:51">2023-03-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-16T07:55:48.000Z" title="更新于 2023-03-16 15:55:48">2023-03-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h1><h2 id="什么是堆"><a href="#什么是堆" class="headerlink" title="什么是堆"></a>什么是堆</h2><p>堆是一种满足以下条件的树：</p>
+<p>堆中的每一个节点值都大于等于（或小于等于）子树中所有节点的值。或者说，任意一个节点的值都大于等于（或小于等于）所有子节点的值。</p>
+<blockquote>
+<p>大家可以把堆(最大堆)理解为一个公司,这个公司很公平,谁能力强谁就当老大,不存在弱的人当老大,老大手底下的人一定不会比他强。这样有助于理解后续堆的操作。</p>
+</blockquote>
+<p><strong>!!!特别提示：</strong></p>
+<ul>
+<li>很多博客说堆是完全二叉树，其实并非如此，<strong>堆不一定是完全二叉树</strong>，只是为了方便存储和索引，我们通常用完全二叉树的形式来表示堆，事实上，广为人知的斐波那契堆和二项堆就不是完全二叉树,它们甚至都不是二叉树。</li>
+<li>（<strong>二叉</strong>）堆是一个数组，它可以被看成是一个 <strong>近似的完全二叉树</strong>。——《算法导论》第三版</li>
+</ul>
+<p>大家可以尝试判断下面给出的图是否是堆？</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%A0%861.png"></p>
+<p>第1个和第2个是堆。第1个是最大堆，每个节点都比子树中所有节点大。第2个是最小堆，每个节点都比子树中所有节点小。</p>
+<p>第3个不是，第三个中，根结点1比2和15小，而15却比3大，19比5大，不满足堆的性质。</p>
+<h2 id="堆的用途"><a href="#堆的用途" class="headerlink" title="堆的用途"></a>堆的用途</h2><p>当我们只关心所有数据中的最大值或者最小值，存在多次获取最大值或者最小值，多次插入或删除数据时，就可以使用堆。</p>
+<p>有小伙伴可能会想到用有序数组，初始化一个有序数组时间复杂度是 <code>O(nlog(n))</code>，查找最大值或者最小值时间复杂度都是 <code>O(1)</code>，但是，涉及到更新（插入或删除）数据时，时间复杂度为 <code>O(n)</code>，即使是使用复杂度为 <code>O(log(n))</code> 的二分法找到要插入或者删除的数据，在移动数据时也需要 <code>O(n)</code> 的时间复杂度。</p>
+<p><strong>相对于有序数组而言，堆的主要优势在于更新数据效率较高。</strong> 堆的初始化时间复杂度为 <code>O(nlog(n))</code>，堆可以做到<code>O(1)</code>时间复杂度取出最大值或者最小值，<code>O(log(n))</code>时间复杂度插入或者删除数据，具体操作在后续章节详细介绍。</p>
+<h2 id="堆的分类"><a href="#堆的分类" class="headerlink" title="堆的分类"></a>堆的分类</h2><p>堆分为 <strong>最大堆</strong> 和 <strong>最小堆</strong>。二者的区别在于节点的排序方式。</p>
+<ul>
+<li><strong>最大堆</strong> ：堆中的每一个节点的值都大于等于子树中所有节点的值</li>
+<li><strong>最小堆</strong> ：堆中的每一个节点的值都小于等于子树中所有节点的值</li>
+</ul>
+<p>如下图所示，图1是最大堆，图2是最小堆</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%A0%862.png"></p>
+<h2 id="堆的存储"><a href="#堆的存储" class="headerlink" title="堆的存储"></a>堆的存储</h2><p>之前介绍树的时候说过，由于完全二叉树的优秀性质，利用数组存储二叉树即节省空间，又方便索引（若根结点的序号为1，那么对于树中任意节点i，其左子节点序号为 <code>2*i</code>，右子节点序号为 <code>2*i+1</code>）。</p>
+<p>为了方便存储和索引，（二叉）堆可以用完全二叉树的形式进行存储。存储的方式如下图所示：</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%A0%86%E7%9A%84%E5%AD%98%E5%82%A8.png" alt="堆的存储"></p>
+<h2 id="堆的操作"><a href="#堆的操作" class="headerlink" title="堆的操作"></a>堆的操作</h2><p>堆的更新操作主要包括两种 :  <strong>插入元素</strong> 和 <strong>删除堆顶元素</strong>。操作过程需要着重掌握和理解。</p>
+<blockquote>
+<p>在进入正题之前，再重申一遍，堆是一个公平的公司，有能力的人自然会走到与他能力所匹配的位置</p>
+</blockquote>
+<h3 id="插入元素"><a href="#插入元素" class="headerlink" title="插入元素"></a>插入元素</h3><blockquote>
+<p>插入元素，作为一个新入职的员工，初来乍到，这个员工需要从基层做起</p>
+</blockquote>
+<p><strong>1.将要插入的元素放到最后</strong></p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%A0%86-%E6%8F%92%E5%85%A5%E5%85%83%E7%B4%A01.png" alt="堆-插入元素-1"></p>
+<blockquote>
+<p>有能力的人会逐渐升职加薪，是金子总会发光的！！！</p>
+</blockquote>
+<p><strong>2.从底向上，如果父结点比该元素小，则该节点和父结点交换，直到无法交换</strong></p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%A0%86-%E6%8F%92%E5%85%A5%E5%85%83%E7%B4%A02.png" alt="堆-插入元素2"></p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%A0%86-%E6%8F%92%E5%85%A5%E5%85%83%E7%B4%A03.png" alt="堆-插入元素3"></p>
+<h3 id="删除堆顶元素"><a href="#删除堆顶元素" class="headerlink" title="删除堆顶元素"></a>删除堆顶元素</h3><p>根据堆的性质可知，最大堆的堆顶元素为所有元素中最大的，最小堆的堆顶元素是所有元素中最小的。当我们需要多次查找最大元素或者最小元素的时候，可以利用堆来实现。</p>
+<p>删除堆顶元素后，为了保持堆的性质，需要对堆的结构进行调整，我们将这个过程称之为”<strong>堆化</strong>“，堆化的方法分为两种：</p>
+<ul>
+<li>一种是自底向上的堆化，上述的插入元素所使用的就是自底向上的堆化，元素从最底部向上移动。</li>
+<li>另一种是自顶向下堆化，元素由最顶部向下移动。在讲解删除堆顶元素的方法时，我将阐述这两种操作的过程，大家可以体会一下二者的不同。</li>
+</ul>
+<h4 id="自底向上堆化"><a href="#自底向上堆化" class="headerlink" title="自底向上堆化"></a>自底向上堆化</h4><blockquote>
+<p>在堆这个公司中，会出现老大离职的现象，老大离职之后，他的位置就空出来了</p>
+</blockquote>
+<p>首先删除堆顶元素，使得数组中下标为1的位置空出。</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%88%A0%E9%99%A4%E5%A0%86%E9%A1%B6%E5%85%83%E7%B4%A01.png" alt="删除堆顶元素1"></p>
+<blockquote>
+<p>那么他的位置由谁来接替呢，当然是他的直接下属了，谁能力强就让谁上呗</p>
+</blockquote>
+<p>比较根结点的左子节点和右子节点，也就是下标为2,3的数组元素，将较大的元素填充到根结点(下标为1)的位置。</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%88%A0%E9%99%A4%E5%A0%86%E9%A1%B6%E5%85%83%E7%B4%A02.png" alt="删除堆顶元素2"></p>
+<blockquote>
+<p>这个时候又空出一个位置了，老规矩，谁有能力谁上</p>
+</blockquote>
+<p>一直循环比较空出位置的左右子节点，并将较大者移至空位，直到堆的最底部</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%88%A0%E9%99%A4%E5%A0%86%E9%A1%B6%E5%85%83%E7%B4%A03.png" alt="删除堆顶元素3"></p>
+<p>这个时候已经完成了自底向上的堆化，没有元素可以填补空缺了，但是，我们可以看到数组中出现了“气泡”，这会导致存储空间的浪费。接下来我们试试自顶向下堆化。</p>
+<h4 id="自顶向下堆化"><a href="#自顶向下堆化" class="headerlink" title="自顶向下堆化"></a>自顶向下堆化</h4><p>自顶向下的堆化用一个词形容就是“石沉大海”，那么第一件事情，就是把石头抬起来，从海面扔下去。这个石头就是堆的最后一个元素，我们将最后一个元素移动到堆顶。</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%88%A0%E9%99%A4%E5%A0%86%E9%A1%B6%E5%85%83%E7%B4%A04.png" alt="删除堆顶元素4"></p>
+<p>然后开始将这个石头沉入海底，不停与左右子节点的值进行比较，和较大的子节点交换位置，直到无法交换位置。</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%88%A0%E9%99%A4%E5%A0%86%E9%A1%B6%E5%85%83%E7%B4%A05.png" alt="删除堆顶元素5"></p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%88%A0%E9%99%A4%E5%A0%86%E9%A1%B6%E5%85%83%E7%B4%A06.png" alt="删除堆顶元素6"></p>
+<h3 id="堆的操作总结"><a href="#堆的操作总结" class="headerlink" title="堆的操作总结"></a>堆的操作总结</h3><ul>
+<li><strong>插入元素</strong> ：先将元素放至数组末尾，再自底向上堆化，将末尾元素上浮</li>
+<li><strong>删除堆顶元素</strong> ：删除堆顶元素，将末尾元素放至堆顶，再自顶向下堆化，将堆顶元素下沉。也可以自底向上堆化，只是会产生“气泡”，浪费存储空间。最好采用自顶向下堆化的方式。</li>
+</ul>
+<h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><p>堆排序的过程分为两步：</p>
+<ul>
+<li>第一步是建堆，将一个无序的数组建立为一个堆</li>
+<li>第二步是排序，将堆顶元素取出，然后对剩下的元素进行堆化，反复迭代，直到所有元素被取出为止。</li>
+</ul>
+<h3 id="建堆"><a href="#建堆" class="headerlink" title="建堆"></a>建堆</h3><p>如果你已经足够了解堆化的过程，那么建堆的过程掌握起来就比较容易了。建堆的过程就是一个对所有非叶节点的自顶向下堆化过程。</p>
+<p>首先要了解哪些是非叶节点，最后一个节点的父结点及它之前的元素，都是非叶节点。也就是说，如果节点个数为n，那么我们需要对n&#x2F;2到1的节点进行自顶向下（沉底）堆化。</p>
+<p>具体过程如下图：</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%BB%BA%E5%A0%861.png" alt="建堆1"></p>
+<p>将初始的无序数组抽象为一棵树，图中的节点个数为6，所以4,5,6节点为叶节点，1,2,3节点为非叶节点，所以要对1-3号节点进行自顶向下（沉底）堆化，注意，顺序是从后往前堆化，从3号节点开始，一直到1号节点。<br>3号节点堆化结果：</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%BB%BA%E5%A0%862.png" alt="建堆1"></p>
+<p>2号节点堆化结果：</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%BB%BA%E5%A0%863.png" alt="建堆1"></p>
+<p>1号节点堆化结果：</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%BB%BA%E5%A0%864.png" alt="建堆1"></p>
+<p>至此，数组所对应的树已经成为了一个最大堆，建堆完成！</p>
+<h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><p>由于堆顶元素是所有元素中最大的，所以我们重复取出堆顶元素，将这个最大的堆顶元素放至数组末尾，并对剩下的元素进行堆化即可。</p>
+<p>现在思考两个问题：</p>
+<ul>
+<li>删除堆顶元素后需要执行自顶向下（沉底）堆化还是自底向上（上浮）堆化？</li>
+<li>取出的堆顶元素存在哪，新建一个数组存？</li>
+</ul>
+<p>先回答第一个问题，我们需要执行自顶向下（沉底）堆化，这个堆化一开始要将末尾元素移动至堆顶，这个时候末尾的位置就空出来了，由于堆中元素已经减小，这个位置不会再被使用，所以我们可以将取出的元素放在末尾。</p>
+<p>机智的小伙伴已经发现了，这其实是做了一次交换操作，将堆顶和末尾元素调换位置，从而将取出堆顶元素和堆化的第一步(将末尾元素放至根结点位置)进行合并。</p>
+<p>详细过程如下图所示：</p>
+<p>取出第一个元素并堆化：</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%A0%86%E6%8E%92%E5%BA%8F1.png" alt="堆排序1"></p>
+<p>取出第二个元素并堆化：</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%A0%86%E6%8E%92%E5%BA%8F2.png" alt="堆排序2"></p>
+<p>取出第三个元素并堆化：</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%A0%86%E6%8E%92%E5%BA%8F3.png" alt="堆排序3"></p>
+<p>取出第四个元素并堆化：</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%A0%86%E6%8E%92%E5%BA%8F4.png" alt="堆排序4"></p>
+<p>取出第五个元素并堆化：</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%A0%86%E6%8E%92%E5%BA%8F5.png" alt="堆排序5"></p>
+<p>取出第六个元素并堆化：</p>
+<p><img src="/2023/03/17/cs-basics/data-structure/heap/%E5%A0%86/%E5%A0%86%E6%8E%92%E5%BA%8F6.png" alt="堆排序6"></p>
+<p>堆排序完成！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">阿泽</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://rongzhiy.github.io/2023/03/17/cs-basics/data-structure/heap/">https://rongzhiy.github.io/2023/03/17/cs-basics/data-structure/heap/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://rongzhiy.github.io" target="_blank">Rongzhiyのblog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/03/17/cs-basics/data-structure/linear-data-structure/"><img class="prev-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info"></div></div></a></div><div class="next-post pull-right"><a href="/2023/03/17/cs-basics/data-structure/graph/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info"></div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/03/17/cs-basics/data-structure/red-black-tree/" title=""><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title"></div></div></a></div><div><a href="/2023/03/17/cs-basics/data-structure/bloom-filter/" title=""><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title"></div></div></a></div><div><a href="/2023/03/17/cs-basics/data-structure/graph/" title=""><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title"></div></div></a></div><div><a href="/2023/03/17/cs-basics/data-structure/tree/" title=""><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title"></div></div></a></div><div><a href="/2023/03/17/cs-basics/data-structure/linear-data-structure/" title=""><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title"></div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">阿泽</div><div class="author-info__description">Stay Hungry,Stay Foolish</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">223</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">23</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/rongzhiy"><i class="fab fa-github"></i><span>github</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/rongzhiy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:rongzhiy2735@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A0%86"><span class="toc-number">1.</span> <span class="toc-text">堆</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%A0%86"><span class="toc-number">1.1.</span> <span class="toc-text">什么是堆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E7%9A%84%E7%94%A8%E9%80%94"><span class="toc-number">1.2.</span> <span class="toc-text">堆的用途</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">1.3.</span> <span class="toc-text">堆的分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E7%9A%84%E5%AD%98%E5%82%A8"><span class="toc-number">1.4.</span> <span class="toc-text">堆的存储</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-number">1.5.</span> <span class="toc-text">堆的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E5%85%83%E7%B4%A0"><span class="toc-number">1.5.1.</span> <span class="toc-text">插入元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%A0%86%E9%A1%B6%E5%85%83%E7%B4%A0"><span class="toc-number">1.5.2.</span> <span class="toc-text">删除堆顶元素</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%BA%95%E5%90%91%E4%B8%8A%E5%A0%86%E5%8C%96"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">自底向上堆化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E5%A0%86%E5%8C%96"><span class="toc-number">1.5.2.2.</span> <span class="toc-text">自顶向下堆化</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A0%86%E7%9A%84%E6%93%8D%E4%BD%9C%E6%80%BB%E7%BB%93"><span class="toc-number">1.5.3.</span> <span class="toc-text">堆的操作总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E6%8E%92%E5%BA%8F"><span class="toc-number">1.6.</span> <span class="toc-text">堆排序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%BA%E5%A0%86"><span class="toc-number">1.6.1.</span> <span class="toc-text">建堆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F"><span class="toc-number">1.6.2.</span> <span class="toc-text">排序</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/maven/maven-core-concepts/" title="Maven 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Maven 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/maven/maven-core-concepts/" title="Maven 核心概念总结">Maven 核心概念总结</a><time datetime="2023-03-17T09:00:32.696Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/gradle/gradle-core-concepts/" title="Gradle 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gradle 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/gradle/gradle-core-concepts/" title="Gradle 核心概念总结">Gradle 核心概念总结</a><time datetime="2023-03-17T09:00:32.691Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/git/github-tips/" title="Github 实用小技巧总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Github 实用小技巧总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/git/github-tips/" title="Github 实用小技巧总结">Github 实用小技巧总结</a><time datetime="2023-03-17T09:00:32.687Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/git/git-intro/" title="Git 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/git/git-intro/" title="Git 核心概念总结">Git 核心概念总结</a><time datetime="2023-03-17T09:00:32.685Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/docker/docker-intro/" title="Docker 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Docker 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/docker/docker-intro/" title="Docker 核心概念总结">Docker 核心概念总结</a><time datetime="2023-03-17T09:00:32.681Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023  <i id="heartbeat" class="fa fas fa-heartbeat"></i> 阿泽</div><div class="framework-info"><span>框架 </span><a href="">Hexo</a></div></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer src="https://npm.elemecdn.com/jquery@latest/dist/jquery.min.js"></script><script defer data-pjax src="/js/cat.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

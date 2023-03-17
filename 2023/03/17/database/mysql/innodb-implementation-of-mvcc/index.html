@@ -1,0 +1,286 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><div id="myscoll"></div><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>InnoDB存储引擎对MVCC的实现 | Rongzhiyのblog</title><meta name="keywords" content="MySQL"><meta name="author" content="阿泽"><meta name="copyright" content="阿泽"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一致性非锁定读和锁定读一致性非锁定读对于 一致性非锁定读（Consistent Nonlocking Reads） 的实现，通常做法是加一个版本号或者时间戳字段，在更新数据的同时版本号 + 1 或者更新时间戳。查询时，将当前可见的版本号与对应记录的版本号进行比对，如果记录的版本小于可见版本，则表示该记录可见 在 InnoDB 存储引擎中，多版本控制 (multi versioning) 就是对非锁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="InnoDB存储引擎对MVCC的实现">
+<meta property="og:url" content="https://rongzhiy.github.io/2023/03/17/database/mysql/innodb-implementation-of-mvcc/index.html">
+<meta property="og:site_name" content="Rongzhiyのblog">
+<meta property="og:description" content="一致性非锁定读和锁定读一致性非锁定读对于 一致性非锁定读（Consistent Nonlocking Reads） 的实现，通常做法是加一个版本号或者时间戳字段，在更新数据的同时版本号 + 1 或者更新时间戳。查询时，将当前可见的版本号与对应记录的版本号进行比对，如果记录的版本小于可见版本，则表示该记录可见 在 InnoDB 存储引擎中，多版本控制 (multi versioning) 就是对非锁">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2023-03-17T08:59:52.099Z">
+<meta property="article:modified_time" content="2023-03-16T07:55:48.000Z">
+<meta property="article:author" content="阿泽">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://rongzhiy.github.io/2023/03/17/database/mysql/innodb-implementation-of-mvcc/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-16 15:55:48'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/cat.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">223</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">23</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Rongzhiyのblog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">InnoDB存储引擎对MVCC的实现</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-17T08:59:52.099Z" title="发表于 2023-03-17 16:59:52">2023-03-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-16T07:55:48.000Z" title="更新于 2023-03-16 15:55:48">2023-03-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="InnoDB存储引擎对MVCC的实现"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><h2 id="一致性非锁定读和锁定读"><a href="#一致性非锁定读和锁定读" class="headerlink" title="一致性非锁定读和锁定读"></a>一致性非锁定读和锁定读</h2><h3 id="一致性非锁定读"><a href="#一致性非锁定读" class="headerlink" title="一致性非锁定读"></a>一致性非锁定读</h3><p>对于 <a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/innodb-consistent-read.html"><strong>一致性非锁定读（Consistent Nonlocking Reads）</strong> </a>的实现，通常做法是加一个版本号或者时间戳字段，在更新数据的同时版本号 + 1 或者更新时间戳。查询时，将当前可见的版本号与对应记录的版本号进行比对，如果记录的版本小于可见版本，则表示该记录可见</p>
+<p>在 <code>InnoDB</code> 存储引擎中，<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/innodb-multi-versioning.html">多版本控制 (multi versioning)</a> 就是对非锁定读的实现。如果读取的行正在执行 <code>DELETE</code> 或 <code>UPDATE</code> 操作，这时读取操作不会去等待行上锁的释放。相反地，<code>InnoDB</code> 存储引擎会去读取行的一个快照数据，对于这种读取历史数据的方式，我们叫它快照读 (snapshot read)</p>
+<p>在 <code>Repeatable Read</code> 和 <code>Read Committed</code> 两个隔离级别下，如果是执行普通的 <code>select</code> 语句（不包括 <code>select ... lock in share mode</code> ,<code>select ... for update</code>）则会使用 <code>一致性非锁定读（MVCC）</code>。并且在 <code>Repeatable Read</code> 下 <code>MVCC</code> 实现了可重复读和防止部分幻读</p>
+<h3 id="锁定读"><a href="#锁定读" class="headerlink" title="锁定读"></a>锁定读</h3><p>如果执行的是下列语句，就是 <a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/innodb-locking-reads.html"><strong>锁定读（Locking Reads）</strong></a></p>
+<ul>
+<li><code>select ... lock in share mode</code></li>
+<li><code>select ... for update</code></li>
+<li><code>insert</code>、<code>update</code>、<code>delete</code> 操作</li>
+</ul>
+<p>在锁定读下，读取的是数据的最新版本，这种读也被称为 <code>当前读（current read）</code>。锁定读会对读取到的记录加锁：</p>
+<ul>
+<li><p><code>select ... lock in share mode</code>：对记录加 <code>S</code> 锁，其它事务也可以加<code>S</code>锁，如果加 <code>x</code> 锁则会被阻塞</p>
+</li>
+<li><p><code>select ... for update</code>、<code>insert</code>、<code>update</code>、<code>delete</code>：对记录加 <code>X</code> 锁，且其它事务不能加任何锁</p>
+</li>
+</ul>
+<p>在一致性非锁定读下，即使读取的记录已被其它事务加上 <code>X</code> 锁，这时记录也是可以被读取的，即读取的快照数据。上面说了，在 <code>Repeatable Read</code> 下 <code>MVCC</code> 防止了部分幻读，这边的 “部分” 是指在 <code>一致性非锁定读</code> 情况下，只能读取到第一次查询之前所插入的数据（根据 Read View 判断数据可见性，Read View 在第一次查询时生成）。但是！如果是 <code>当前读</code> ，每次读取的都是最新数据，这时如果两次查询中间有其它事务插入数据，就会产生幻读。所以， <strong><code>InnoDB</code> 在实现<code>Repeatable Read</code> 时，如果执行的是当前读，则会对读取的记录使用 <code>Next-key Lock</code> ，来防止其它事务在间隙间插入数据</strong></p>
+<h2 id="InnoDB-对-MVCC-的实现"><a href="#InnoDB-对-MVCC-的实现" class="headerlink" title="InnoDB 对 MVCC 的实现"></a>InnoDB 对 MVCC 的实现</h2><p><code>MVCC</code> 的实现依赖于：<strong>隐藏字段、Read View、undo log</strong>。在内部实现中，<code>InnoDB</code> 通过数据行的 <code>DB_TRX_ID</code> 和 <code>Read View</code> 来判断数据的可见性，如不可见，则通过数据行的 <code>DB_ROLL_PTR</code> 找到 <code>undo log</code> 中的历史版本。每个事务读到的数据版本可能是不一样的，在同一个事务中，用户只能看到该事务创建 <code>Read View</code> 之前已经提交的修改和该事务本身做的修改</p>
+<h3 id="隐藏字段"><a href="#隐藏字段" class="headerlink" title="隐藏字段"></a>隐藏字段</h3><p>在内部，<code>InnoDB</code> 存储引擎为每行数据添加了三个 <a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/innodb-multi-versioning.html">隐藏字段</a>：</p>
+<ul>
+<li><code>DB_TRX_ID（6字节）</code>：表示最后一次插入或更新该行的事务 id。此外，<code>delete</code> 操作在内部被视为更新，只不过会在记录头 <code>Record header</code> 中的 <code>deleted_flag</code> 字段将其标记为已删除</li>
+<li><code>DB_ROLL_PTR（7字节）</code> 回滚指针，指向该行的 <code>undo log</code> 。如果该行未被更新，则为空</li>
+<li><code>DB_ROW_ID（6字节）</code>：如果没有设置主键且该表没有唯一非空索引时，<code>InnoDB</code> 会使用该 id 来生成聚簇索引</li>
+</ul>
+<h3 id="ReadView"><a href="#ReadView" class="headerlink" title="ReadView"></a>ReadView</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ReadView</span> &#123;</span></span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">private:</span><br><span class="line">  <span class="type">trx_id_t</span> m_low_limit_id;      <span class="comment">/* 大于等于这个 ID 的事务均不可见 */</span></span><br><span class="line"></span><br><span class="line">  <span class="type">trx_id_t</span> m_up_limit_id;       <span class="comment">/* 小于这个 ID 的事务均可见 */</span></span><br><span class="line"></span><br><span class="line">  <span class="type">trx_id_t</span> m_creator_trx_id;    <span class="comment">/* 创建该 Read View 的事务ID */</span></span><br><span class="line"></span><br><span class="line">  <span class="type">trx_id_t</span> m_low_limit_no;      <span class="comment">/* 事务 Number, 小于该 Number 的 Undo Logs 均可以被 Purge */</span></span><br><span class="line"></span><br><span class="line">  <span class="type">ids_t</span> m_ids;                  <span class="comment">/* 创建 Read View 时的活跃事务列表 */</span></span><br><span class="line"></span><br><span class="line">  m_closed;                     <span class="comment">/* 标记 Read View 是否 close */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/facebook/mysql-8.0/blob/8.0/storage/innobase/include/read0types.h#L298"><code>Read View</code></a> 主要是用来做可见性判断，里面保存了 “当前对本事务不可见的其他活跃事务”</p>
+<p>主要有以下字段：</p>
+<ul>
+<li><code>m_low_limit_id</code>：目前出现过的最大的事务 ID+1，即下一个将被分配的事务 ID。大于等于这个 ID 的数据版本均不可见</li>
+<li><code>m_up_limit_id</code>：活跃事务列表 <code>m_ids</code> 中最小的事务 ID，如果 <code>m_ids</code> 为空，则 <code>m_up_limit_id</code> 为 <code>m_low_limit_id</code>。小于这个 ID 的数据版本均可见</li>
+<li><code>m_ids</code>：<code>Read View</code> 创建时其他未提交的活跃事务 ID 列表。创建 <code>Read View</code>时，将当前未提交事务 ID 记录下来，后续即使它们修改了记录行的值，对于当前事务也是不可见的。<code>m_ids</code> 不包括当前事务自己和已提交的事务（正在内存中）</li>
+<li><code>m_creator_trx_id</code>：创建该 <code>Read View</code> 的事务 ID</li>
+</ul>
+<p><strong>事务可见性示意图</strong>（<a target="_blank" rel="noopener" href="https://leviathan.vip/2019/03/20/InnoDB%E7%9A%84%E4%BA%8B%E5%8A%A1%E5%88%86%E6%9E%90-MVCC/#MVCC-1">图源</a>）：</p>
+<p><img src="/./images/mvvc/trans_visible.png" alt="trans_visible"></p>
+<h3 id="undo-log"><a href="#undo-log" class="headerlink" title="undo-log"></a>undo-log</h3><p><code>undo log</code> 主要有两个作用：</p>
+<ul>
+<li>当事务回滚时用于将数据恢复到修改前的样子</li>
+<li>另一个作用是 <code>MVCC</code> ，当读取记录时，若该记录被其他事务占用或当前版本对该事务不可见，则可以通过 <code>undo log</code> 读取之前的版本数据，以此实现非锁定读</li>
+</ul>
+<p><strong>在 <code>InnoDB</code> 存储引擎中 <code>undo log</code> 分为两种： <code>insert undo log</code> 和 <code>update undo log</code>：</strong></p>
+<ol>
+<li><strong><code>insert undo log</code></strong> ：指在 <code>insert</code> 操作中产生的 <code>undo log</code>。因为 <code>insert</code> 操作的记录只对事务本身可见，对其他事务不可见，故该 <code>undo log</code> 可以在事务提交后直接删除。不需要进行 <code>purge</code> 操作</li>
+</ol>
+<p><strong><code>insert</code> 时的数据初始状态：</strong></p>
+<p><img src="/./images/mvvc/317e91e1-1ee1-42ad-9412-9098d5c6a9ad.png"></p>
+<ol start="2">
+<li><strong><code>update undo log</code></strong> ：<code>update</code> 或 <code>delete</code> 操作中产生的 <code>undo log</code>。该 <code>undo log</code>可能需要提供 <code>MVCC</code> 机制，因此不能在事务提交时就进行删除。提交时放入 <code>undo log</code> 链表，等待 <code>purge线程</code> 进行最后的删除</li>
+</ol>
+<p><strong>数据第一次被修改时：</strong></p>
+<p><img src="/./images/mvvc/c52ff79f-10e6-46cb-b5d4-3c9cbcc1934a.png"></p>
+<p><strong>数据第二次被修改时：</strong></p>
+<p><img src="/./images/mvvc/6a276e7a-b0da-4c7b-bdf7-c0c7b7b3b31c.png"></p>
+<p>不同事务或者相同事务的对同一记录行的修改，会使该记录行的 <code>undo log</code> 成为一条链表，链首就是最新的记录，链尾就是最早的旧记录。</p>
+<h3 id="数据可见性算法"><a href="#数据可见性算法" class="headerlink" title="数据可见性算法"></a>数据可见性算法</h3><p>在 <code>InnoDB</code> 存储引擎中，创建一个新事务后，执行每个 <code>select</code> 语句前，都会创建一个快照（Read View），<strong>快照中保存了当前数据库系统中正处于活跃（没有 commit）的事务的 ID 号</strong>。其实简单的说保存的是系统中当前不应该被本事务看到的其他事务 ID 列表（即 m_ids）。当用户在这个事务中要读取某个记录行的时候，<code>InnoDB</code> 会将该记录行的 <code>DB_TRX_ID</code> 与 <code>Read View</code> 中的一些变量及当前事务 ID 进行比较，判断是否满足可见性条件</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/facebook/mysql-8.0/blob/8.0/storage/innobase/include/read0types.h#L161">具体的比较算法</a>如下(<a target="_blank" rel="noopener" href="https://leviathan.vip/2019/03/20/InnoDB%E7%9A%84%E4%BA%8B%E5%8A%A1%E5%88%86%E6%9E%90-MVCC/#MVCC-1">图源</a>)：</p>
+<p><img src="/./images/mvvc/8778836b-34a8-480b-b8c7-654fe207a8c2.png"></p>
+<ol>
+<li><p>如果记录 DB_TRX_ID &lt; m_up_limit_id，那么表明最新修改该行的事务（DB_TRX_ID）在当前事务创建快照之前就提交了，所以该记录行的值对当前事务是可见的</p>
+</li>
+<li><p>如果 DB_TRX_ID &gt;&#x3D; m_low_limit_id，那么表明最新修改该行的事务（DB_TRX_ID）在当前事务创建快照之后才修改该行，所以该记录行的值对当前事务不可见。跳到步骤 5</p>
+</li>
+<li><p>m_ids 为空，则表明在当前事务创建快照之前，修改该行的事务就已经提交了，所以该记录行的值对当前事务是可见的</p>
+</li>
+<li><p>如果 m_up_limit_id &lt;&#x3D; DB_TRX_ID &lt; m_low_limit_id，表明最新修改该行的事务（DB_TRX_ID）在当前事务创建快照的时候可能处于“活动状态”或者“已提交状态”；所以就要对活跃事务列表 m_ids 进行查找（源码中是用的二分查找，因为是有序的）</p>
+<ul>
+<li><p>如果在活跃事务列表 m_ids 中能找到 DB_TRX_ID，表明：① 在当前事务创建快照前，该记录行的值被事务 ID 为 DB_TRX_ID 的事务修改了，但没有提交；或者 ② 在当前事务创建快照后，该记录行的值被事务 ID 为 DB_TRX_ID 的事务修改了。这些情况下，这个记录行的值对当前事务都是不可见的。跳到步骤 5</p>
+</li>
+<li><p>在活跃事务列表中找不到，则表明“id 为 trx_id 的事务”在修改“该记录行的值”后，在“当前事务”创建快照前就已经提交了，所以记录行对当前事务可见</p>
+</li>
+</ul>
+</li>
+<li><p>在该记录行的 DB_ROLL_PTR 指针所指向的 <code>undo log</code> 取出快照记录，用快照记录的 DB_TRX_ID 跳到步骤 1 重新开始判断，直到找到满足的快照版本或返回空</p>
+</li>
+</ol>
+<h2 id="RC-和-RR-隔离级别下-MVCC-的差异"><a href="#RC-和-RR-隔离级别下-MVCC-的差异" class="headerlink" title="RC 和 RR 隔离级别下 MVCC 的差异"></a>RC 和 RR 隔离级别下 MVCC 的差异</h2><p>在事务隔离级别 <code>RC</code> 和 <code>RR</code> （InnoDB 存储引擎的默认事务隔离级别）下，<code>InnoDB</code> 存储引擎使用 <code>MVCC</code>（非锁定一致性读），但它们生成 <code>Read View</code> 的时机却不同</p>
+<ul>
+<li>在 RC 隔离级别下的 <strong><code>每次select</code></strong> 查询前都生成一个<code>Read View</code> (m_ids 列表)</li>
+<li>在 RR 隔离级别下只在事务开始后 <strong><code>第一次select</code></strong> 数据前生成一个<code>Read View</code>（m_ids 列表）</li>
+</ul>
+<h2 id="MVCC-解决不可重复读问题"><a href="#MVCC-解决不可重复读问题" class="headerlink" title="MVCC 解决不可重复读问题"></a>MVCC 解决不可重复读问题</h2><p>虽然 RC 和 RR 都通过 <code>MVCC</code> 来读取快照数据，但由于 <strong>生成 Read View 时机不同</strong>，从而在 RR 级别下实现可重复读</p>
+<p>举个例子：</p>
+<p><img src="/./images/mvvc/6fb2b9a1-5f14-4dec-a797-e4cf388ed413.png"></p>
+<h3 id="在-RC-下-ReadView-生成情况"><a href="#在-RC-下-ReadView-生成情况" class="headerlink" title="在 RC 下 ReadView 生成情况"></a>在 RC 下 ReadView 生成情况</h3><p><strong>1. 假设时间线来到 T4 ，那么此时数据行 id &#x3D; 1 的版本链为：</strong></p>
+<p><img src="/./images/mvvc/a3fd1ec6-8f37-42fa-b090-7446d488fd04.png"></p>
+<p>由于 RC 级别下每次查询都会生成<code>Read View</code> ，并且事务 101、102 并未提交，此时 <code>103</code> 事务生成的 <code>Read View</code> 中活跃的事务 <strong><code>m_ids</code> 为：[101,102]</strong> ，<code>m_low_limit_id</code>为：104，<code>m_up_limit_id</code>为：101，<code>m_creator_trx_id</code> 为：103</p>
+<ul>
+<li>此时最新记录的 <code>DB_TRX_ID</code> 为 101，m_up_limit_id &lt;&#x3D; 101 &lt; m_low_limit_id，所以要在 <code>m_ids</code> 列表中查找，发现 <code>DB_TRX_ID</code> 存在列表中，那么这个记录不可见</li>
+<li>根据 <code>DB_ROLL_PTR</code> 找到 <code>undo log</code> 中的上一版本记录，上一条记录的 <code>DB_TRX_ID</code> 还是 101，不可见</li>
+<li>继续找上一条 <code>DB_TRX_ID</code>为 1，满足 1 &lt; m_up_limit_id，可见，所以事务 103 查询到数据为 <code>name = 菜花</code></li>
+</ul>
+<p><strong>2. 时间线来到 T6 ，数据的版本链为：</strong></p>
+<p><img src="/./images/mvvc/528559e9-dae8-4d14-b78d-a5b657c88391.png"></p>
+<p>因为在 RC 级别下，重新生成 <code>Read View</code>，这时事务 101 已经提交，102 并未提交，所以此时 <code>Read View</code> 中活跃的事务 <strong><code>m_ids</code>：[102]</strong> ，<code>m_low_limit_id</code>为：104，<code>m_up_limit_id</code>为：102，<code>m_creator_trx_id</code>为：103</p>
+<ul>
+<li><p>此时最新记录的 <code>DB_TRX_ID</code> 为 102，m_up_limit_id &lt;&#x3D; 102 &lt; m_low_limit_id，所以要在 <code>m_ids</code> 列表中查找，发现 <code>DB_TRX_ID</code> 存在列表中，那么这个记录不可见</p>
+</li>
+<li><p>根据 <code>DB_ROLL_PTR</code> 找到 <code>undo log</code> 中的上一版本记录，上一条记录的 <code>DB_TRX_ID</code> 为 101，满足 101 &lt; m_up_limit_id，记录可见，所以在 <code>T6</code> 时间点查询到数据为 <code>name = 李四</code>，与时间 T4 查询到的结果不一致，不可重复读！</p>
+</li>
+</ul>
+<p><strong>3. 时间线来到 T9 ，数据的版本链为：</strong></p>
+<p><img src="/./images/mvvc/6f82703c-36a1-4458-90fe-d7f4edbac71a.png"></p>
+<p>重新生成 <code>Read View</code>， 这时事务 101 和 102 都已经提交，所以 <strong>m_ids</strong> 为空，则 m_up_limit_id &#x3D; m_low_limit_id &#x3D; 104，最新版本事务 ID 为 102，满足 102 &lt; m_low_limit_id，可见，查询结果为 <code>name = 赵六</code></p>
+<blockquote>
+<p><strong>总结：</strong> <strong>在 RC 隔离级别下，事务在每次查询开始时都会生成并设置新的 Read View，所以导致不可重复读</strong></p>
+</blockquote>
+<h3 id="在-RR-下-ReadView-生成情况"><a href="#在-RR-下-ReadView-生成情况" class="headerlink" title="在 RR 下 ReadView 生成情况"></a>在 RR 下 ReadView 生成情况</h3><p>在可重复读级别下，只会在事务开始后第一次读取数据时生成一个 Read View（m_ids 列表）</p>
+<p><strong>1. 在 T4 情况下的版本链为：</strong></p>
+<p><img src="/./images/mvvc/0e906b95-c916-4f30-beda-9cb3e49746bf.png"></p>
+<p>在当前执行 <code>select</code> 语句时生成一个 <code>Read View</code>，此时 <strong><code>m_ids</code>：[101,102]</strong> ，<code>m_low_limit_id</code>为：104，<code>m_up_limit_id</code>为：101，<code>m_creator_trx_id</code> 为：103</p>
+<p>此时和 RC 级别下一样：</p>
+<ul>
+<li>最新记录的 <code>DB_TRX_ID</code> 为 101，m_up_limit_id &lt;&#x3D; 101 &lt; m_low_limit_id，所以要在 <code>m_ids</code> 列表中查找，发现 <code>DB_TRX_ID</code> 存在列表中，那么这个记录不可见</li>
+<li>根据 <code>DB_ROLL_PTR</code> 找到 <code>undo log</code> 中的上一版本记录，上一条记录的 <code>DB_TRX_ID</code> 还是 101，不可见</li>
+<li>继续找上一条 <code>DB_TRX_ID</code>为 1，满足 1 &lt; m_up_limit_id，可见，所以事务 103 查询到数据为 <code>name = 菜花</code></li>
+</ul>
+<p><strong>2. 时间点 T6 情况下：</strong></p>
+<p><img src="/./images/mvvc/79ed6142-7664-4e0b-9023-cf546586aa39.png"></p>
+<p>在 RR 级别下只会生成一次<code>Read View</code>，所以此时依然沿用 <strong><code>m_ids</code> ：[101,102]</strong> ，<code>m_low_limit_id</code>为：104，<code>m_up_limit_id</code>为：101，<code>m_creator_trx_id</code> 为：103</p>
+<ul>
+<li><p>最新记录的 <code>DB_TRX_ID</code> 为 102，m_up_limit_id &lt;&#x3D; 102 &lt; m_low_limit_id，所以要在 <code>m_ids</code> 列表中查找，发现 <code>DB_TRX_ID</code> 存在列表中，那么这个记录不可见</p>
+</li>
+<li><p>根据 <code>DB_ROLL_PTR</code> 找到 <code>undo log</code> 中的上一版本记录，上一条记录的 <code>DB_TRX_ID</code> 为 101，不可见</p>
+</li>
+<li><p>继续根据 <code>DB_ROLL_PTR</code> 找到 <code>undo log</code> 中的上一版本记录，上一条记录的 <code>DB_TRX_ID</code> 还是 101，不可见</p>
+</li>
+<li><p>继续找上一条 <code>DB_TRX_ID</code>为 1，满足 1 &lt; m_up_limit_id，可见，所以事务 103 查询到数据为 <code>name = 菜花</code></p>
+</li>
+</ul>
+<p><strong>3. 时间点 T9 情况下：</strong></p>
+<p><img src="/./images/mvvc/cbbedbc5-0e3c-4711-aafd-7f3d68a4ed4e.png"></p>
+<p>此时情况跟 T6 完全一样，由于已经生成了 <code>Read View</code>，此时依然沿用 <strong><code>m_ids</code> ：[101,102]</strong> ，所以查询结果依然是 <code>name = 菜花</code></p>
+<h2 id="MVCC➕Next-key-Lock-防止幻读"><a href="#MVCC➕Next-key-Lock-防止幻读" class="headerlink" title="MVCC➕Next-key-Lock 防止幻读"></a>MVCC➕Next-key-Lock 防止幻读</h2><p><code>InnoDB</code>存储引擎在 RR 级别下通过 <code>MVCC</code>和 <code>Next-key Lock</code> 来解决幻读问题：</p>
+<p><strong>1、执行普通 <code>select</code>，此时会以 <code>MVCC</code> 快照读的方式读取数据</strong></p>
+<p>在快照读的情况下，RR 隔离级别只会在事务开启后的第一次查询生成 <code>Read View</code> ，并使用至事务提交。所以在生成 <code>Read View</code> 之后其它事务所做的更新、插入记录版本对当前事务并不可见，实现了可重复读和防止快照读下的 “幻读”</p>
+<p><strong>2、执行 select…for update&#x2F;lock in share mode、insert、update、delete 等当前读</strong></p>
+<p>在当前读下，读取的都是最新的数据，如果其它事务有插入新的记录，并且刚好在当前事务查询范围内，就会产生幻读！<code>InnoDB</code> 使用 <a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/innodb-locking.html#innodb-next-key-locks">Next-key Lock</a> 来防止这种情况。当执行当前读时，会锁定读取到的记录的同时，锁定它们的间隙，防止其它事务在查询范围内插入数据。只要我不让你插入，就不会发生幻读</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><strong>《MySQL 技术内幕 InnoDB 存储引擎第 2 版》</strong></li>
+<li><a target="_blank" rel="noopener" href="https://tech.meituan.com/2014/08/20/innodb-lock.html">Innodb 中的事务隔离级别和锁的关系</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35190492/article/details/109044141">MySQL 事务与 MVCC 如何实现的隔离级别</a></li>
+<li><a target="_blank" rel="noopener" href="https://leviathan.vip/2019/03/20/InnoDB%E7%9A%84%E4%BA%8B%E5%8A%A1%E5%88%86%E6%9E%90-MVCC/">InnoDB 事务分析-MVCC</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">阿泽</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://rongzhiy.github.io/2023/03/17/database/mysql/innodb-implementation-of-mvcc/">https://rongzhiy.github.io/2023/03/17/database/mysql/innodb-implementation-of-mvcc/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://rongzhiy.github.io" target="_blank">Rongzhiyのblog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/03/17/database/mysql/mysql-auto-increment-primary-key-continuous/"><img class="prev-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">MySQL自增主键一定是连续的吗</div></div></a></div><div class="next-post pull-right"><a href="/2023/03/17/database/mysql/index-invalidation-caused-by-implicit-conversion/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">MySQL隐式转换造成索引失效</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/03/17/database/mysql/how-sql-executed-in-mysql/" title="SQL语句在MySQL中的执行过程"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">SQL语句在MySQL中的执行过程</div></div></a></div><div><a href="/2023/03/17/database/mysql/a-thousand-lines-of-mysql-study-notes/" title="一千行 MySQL 学习笔记"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">一千行 MySQL 学习笔记</div></div></a></div><div><a href="/2023/03/17/database/mysql/index-invalidation-caused-by-implicit-conversion/" title="MySQL隐式转换造成索引失效"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">MySQL隐式转换造成索引失效</div></div></a></div><div><a href="/2023/03/17/database/mysql/mysql-index/" title="MySQL索引详解"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">MySQL索引详解</div></div></a></div><div><a href="/2023/03/17/database/mysql/mysql-auto-increment-primary-key-continuous/" title="MySQL自增主键一定是连续的吗"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">MySQL自增主键一定是连续的吗</div></div></a></div><div><a href="/2023/03/17/database/mysql/mysql-high-performance-optimization-specification-recommendations/" title="MySQL高性能优化规范建议总结"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">MySQL高性能优化规范建议总结</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">阿泽</div><div class="author-info__description">Stay Hungry,Stay Foolish</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">223</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">23</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/rongzhiy"><i class="fab fa-github"></i><span>github</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/rongzhiy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:rongzhiy2735@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E9%9D%9E%E9%94%81%E5%AE%9A%E8%AF%BB%E5%92%8C%E9%94%81%E5%AE%9A%E8%AF%BB"><span class="toc-number">1.</span> <span class="toc-text">一致性非锁定读和锁定读</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E9%9D%9E%E9%94%81%E5%AE%9A%E8%AF%BB"><span class="toc-number">1.1.</span> <span class="toc-text">一致性非锁定读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%81%E5%AE%9A%E8%AF%BB"><span class="toc-number">1.2.</span> <span class="toc-text">锁定读</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InnoDB-%E5%AF%B9-MVCC-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">InnoDB 对 MVCC 的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E8%97%8F%E5%AD%97%E6%AE%B5"><span class="toc-number">2.1.</span> <span class="toc-text">隐藏字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ReadView"><span class="toc-number">2.2.</span> <span class="toc-text">ReadView</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undo-log"><span class="toc-number">2.3.</span> <span class="toc-text">undo-log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%81%E6%80%A7%E7%AE%97%E6%B3%95"><span class="toc-number">2.4.</span> <span class="toc-text">数据可见性算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RC-%E5%92%8C-RR-%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E4%B8%8B-MVCC-%E7%9A%84%E5%B7%AE%E5%BC%82"><span class="toc-number">3.</span> <span class="toc-text">RC 和 RR 隔离级别下 MVCC 的差异</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MVCC-%E8%A7%A3%E5%86%B3%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E9%97%AE%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text">MVCC 解决不可重复读问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8-RC-%E4%B8%8B-ReadView-%E7%94%9F%E6%88%90%E6%83%85%E5%86%B5"><span class="toc-number">4.1.</span> <span class="toc-text">在 RC 下 ReadView 生成情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8-RR-%E4%B8%8B-ReadView-%E7%94%9F%E6%88%90%E6%83%85%E5%86%B5"><span class="toc-number">4.2.</span> <span class="toc-text">在 RR 下 ReadView 生成情况</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MVCC%E2%9E%95Next-key-Lock-%E9%98%B2%E6%AD%A2%E5%B9%BB%E8%AF%BB"><span class="toc-number">5.</span> <span class="toc-text">MVCC➕Next-key-Lock 防止幻读</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/maven/maven-core-concepts/" title="Maven 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Maven 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/maven/maven-core-concepts/" title="Maven 核心概念总结">Maven 核心概念总结</a><time datetime="2023-03-17T09:00:32.696Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/gradle/gradle-core-concepts/" title="Gradle 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gradle 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/gradle/gradle-core-concepts/" title="Gradle 核心概念总结">Gradle 核心概念总结</a><time datetime="2023-03-17T09:00:32.691Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/git/github-tips/" title="Github 实用小技巧总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Github 实用小技巧总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/git/github-tips/" title="Github 实用小技巧总结">Github 实用小技巧总结</a><time datetime="2023-03-17T09:00:32.687Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/git/git-intro/" title="Git 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/git/git-intro/" title="Git 核心概念总结">Git 核心概念总结</a><time datetime="2023-03-17T09:00:32.685Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/docker/docker-intro/" title="Docker 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Docker 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/docker/docker-intro/" title="Docker 核心概念总结">Docker 核心概念总结</a><time datetime="2023-03-17T09:00:32.681Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023  <i id="heartbeat" class="fa fas fa-heartbeat"></i> 阿泽</div><div class="framework-info"><span>框架 </span><a href="">Hexo</a></div></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer src="https://npm.elemecdn.com/jquery@latest/dist/jquery.min.js"></script><script defer data-pjax src="/js/cat.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

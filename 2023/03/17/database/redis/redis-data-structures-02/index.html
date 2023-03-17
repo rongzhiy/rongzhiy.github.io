@@ -1,0 +1,274 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><div id="myscoll"></div><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Redis 3 种特殊数据结构详解 | Rongzhiyのblog</title><meta name="keywords" content="Redis"><meta name="author" content="阿泽"><meta name="copyright" content="阿泽"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="除了 5 种基本的数据结构之外，Redis 还支持 3 种特殊的数据结构 ：Bitmap、HyperLogLog、GEO。 Bitmap介绍Bitmap 存储的是连续的二进制数字（0 和 1），通过 Bitmap, 只需要一个 bit 位来表示某个元素对应的值或者状态，key 就是对应元素本身 。我们知道 8 个 bit 可以组成一个 byte，所以 Bitmap 本身会极大的节省储存空间。 你可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis 3 种特殊数据结构详解">
+<meta property="og:url" content="https://rongzhiy.github.io/2023/03/17/database/redis/redis-data-structures-02/index.html">
+<meta property="og:site_name" content="Rongzhiyのblog">
+<meta property="og:description" content="除了 5 种基本的数据结构之外，Redis 还支持 3 种特殊的数据结构 ：Bitmap、HyperLogLog、GEO。 Bitmap介绍Bitmap 存储的是连续的二进制数字（0 和 1），通过 Bitmap, 只需要一个 bit 位来表示某个元素对应的值或者状态，key 就是对应元素本身 。我们知道 8 个 bit 可以组成一个 byte，所以 Bitmap 本身会极大的节省储存空间。 你可">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2023-03-17T08:59:52.196Z">
+<meta property="article:modified_time" content="2023-03-16T07:55:48.000Z">
+<meta property="article:author" content="阿泽">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://rongzhiy.github.io/2023/03/17/database/redis/redis-data-structures-02/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-16 15:55:48'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/cat.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">223</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">23</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Rongzhiyのblog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Redis 3 种特殊数据结构详解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-17T08:59:52.196Z" title="发表于 2023-03-17 16:59:52">2023-03-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-16T07:55:48.000Z" title="更新于 2023-03-16 15:55:48">2023-03-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Redis 3 种特殊数据结构详解"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><p>除了 5 种基本的数据结构之外，Redis 还支持 3 种特殊的数据结构 ：Bitmap、HyperLogLog、GEO。</p>
+<h2 id="Bitmap"><a href="#Bitmap" class="headerlink" title="Bitmap"></a>Bitmap</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Bitmap 存储的是连续的二进制数字（0 和 1），通过 Bitmap, 只需要一个 bit 位来表示某个元素对应的值或者状态，key 就是对应元素本身 。我们知道 8 个 bit 可以组成一个 byte，所以 Bitmap 本身会极大的节省储存空间。</p>
+<p>你可以将 Bitmap 看作是一个存储二进制数字（0 和 1）的数组，数组中每个元素的下标叫做 offset（偏移量）。</p>
+<p><img src="https://oss.javaguide.cn/github/javaguide/database/redis/image-20220720194154133.png"></p>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SETBIT key offset value</td>
+<td>设置指定 offset 位置的值</td>
+</tr>
+<tr>
+<td>GETBIT key offset</td>
+<td>获取指定 offset 位置的值</td>
+</tr>
+<tr>
+<td>BITCOUNT key start end</td>
+<td>获取 start 和 end 之前值为 1 的元素个数</td>
+</tr>
+<tr>
+<td>BITOP operation destkey key1 key2 …</td>
+<td>对一个或多个 Bitmap 进行运算，可用运算符有 AND, OR, XOR 以及 NOT</td>
+</tr>
+</tbody></table>
+<p><strong>Bitmap 基本操作演示</strong> ：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># SETBIT 会返回之前位的值（默认是 0）这里会生成 7 个位</span></span><br><span class="line">&gt; SETBIT mykey 7 1</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">&gt; SETBIT mykey 7 0</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">&gt; GETBIT mykey 7</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">&gt; SETBIT mykey 6 1</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">&gt; SETBIT mykey 8 1</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line"><span class="comment"># 通过 bitcount 统计被被设置为 1 的位的数量。</span></span><br><span class="line">&gt; BITCOUNT mykey</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br></pre></td></tr></table></figure>
+
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p><strong>需要保存状态信息（0&#x2F;1 即可表示）的场景</strong></p>
+<ul>
+<li>举例 ：用户签到情况、活跃用户情况、用户行为统计（比如是否点赞过某个视频）。</li>
+<li>相关命令 ：<code>SETBIT</code>、<code>GETBIT</code>、<code>BITCOUNT</code>、<code>BITOP</code>。</li>
+</ul>
+<h2 id="HyperLogLog"><a href="#HyperLogLog" class="headerlink" title="HyperLogLog"></a>HyperLogLog</h2><h3 id="介绍-1"><a href="#介绍-1" class="headerlink" title="介绍"></a>介绍</h3><p>HyperLogLog 是一种有名的基数计数概率算法 ，基于 LogLog Counting(LLC)优化改进得来，并不是 Redis 特有的，Redis 只是实现了这个算法并提供了一些开箱即用的 API。</p>
+<p>Redis 提供的 HyperLogLog 占用空间非常非常小，只需要 12k 的空间就能存储接近<code>2^64</code>个不同元素。这是真的厉害，这就是数学的魅力么！并且，Redis 对 HyperLogLog 的存储结构做了优化，采用两种方式计数：</p>
+<ul>
+<li><strong>稀疏矩阵</strong> ：计数较少的时候，占用空间很小。</li>
+<li><strong>稠密矩阵</strong> ：计数达到某个阈值的时候，占用 12k 的空间。</li>
+</ul>
+<p>Redis 官方文档中有对应的详细说明：</p>
+<p><img src="https://oss.javaguide.cn/github/javaguide/database/redis/image-20220721091424563.png"></p>
+<p>基数计数概率算法为了节省内存并不会直接存储元数据，而是通过一定的概率统计方法预估基数值（集合中包含元素的个数）。因此， HyperLogLog 的计数结果并不是一个精确值，存在一定的误差（标准误差为 <code>0.81%</code> 。）。</p>
+<p><img src="https://oss.javaguide.cn/github/javaguide/database/redis/image-20220720194154133.png"></p>
+<p>HyperLogLog 的使用非常简单，但原理非常复杂。HyperLogLog 的原理以及在 Redis 中的实现可以看这篇文章：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903785744056333">HyperLogLog 算法的原理讲解以及 Redis 是如何应用它的</a> 。</p>
+<p>再推荐一个可以帮助理解 HyperLogLog 原理的工具：<a target="_blank" rel="noopener" href="http://content.research.neustar.biz/blog/hll.html">Sketch of the Day: HyperLogLog — Cornerstone of a Big Data Infrastructure</a> 。</p>
+<h3 id="常用命令-1"><a href="#常用命令-1" class="headerlink" title="常用命令"></a>常用命令</h3><p>HyperLogLog 相关的命令非常少，最常用的也就 3 个。</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PFADD key element1 element2 …</td>
+<td>添加一个或多个元素到 HyperLogLog 中</td>
+</tr>
+<tr>
+<td>PFCOUNT key1 key2</td>
+<td>获取一个或者多个 HyperLogLog 的唯一计数。</td>
+</tr>
+<tr>
+<td>PFMERGE destkey sourcekey1 sourcekey2 …</td>
+<td>将多个 HyperLogLog 合并到 destkey 中，destkey 会结合多个源，算出对应的唯一计数。</td>
+</tr>
+</tbody></table>
+<p><strong>HyperLogLog 基本操作演示</strong> ：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&gt; PFADD hll foo bar zap</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">&gt; PFADD hll zap zap zap</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">&gt; PFADD hll foo bar</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">&gt; PFCOUNT hll</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">&gt; PFADD some-other-hll 1 2 3</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">&gt; PFCOUNT hll some-other-hll</span><br><span class="line">(<span class="built_in">integer</span>) 6</span><br><span class="line">&gt; PFMERGE desthll hll some-other-hll</span><br><span class="line"><span class="string">&quot;OK&quot;</span></span><br><span class="line">&gt; PFCOUNT desthll</span><br><span class="line">(<span class="built_in">integer</span>) 6</span><br></pre></td></tr></table></figure>
+
+<h3 id="应用场景-1"><a href="#应用场景-1" class="headerlink" title="应用场景"></a>应用场景</h3><p><strong>数量量巨大（百万、千万级别以上）的计数场景</strong></p>
+<ul>
+<li>举例 ：热门网站每日&#x2F;每周&#x2F;每月访问 ip 数统计、热门帖子 uv 统计、</li>
+<li>相关命令 ：<code>PFADD</code>、<code>PFCOUNT</code> 。</li>
+</ul>
+<h2 id="Geospatial-index"><a href="#Geospatial-index" class="headerlink" title="Geospatial index"></a>Geospatial index</h2><h3 id="介绍-2"><a href="#介绍-2" class="headerlink" title="介绍"></a>介绍</h3><p>Geospatial index（地理空间索引，简称 GEO） 主要用于存储地理位置信息，基于 Sorted Set 实现。</p>
+<p>通过 GEO 我们可以轻松实现两个位置距离的计算、获取指定位置附近的元素等功能。</p>
+<p><img src="https://oss.javaguide.cn/github/javaguide/database/redis/image-20220720194359494.png"></p>
+<h3 id="常用命令-2"><a href="#常用命令-2" class="headerlink" title="常用命令"></a>常用命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GEOADD key longitude1 latitude1 member1 …</td>
+<td>添加一个或多个元素对应的经纬度信息到 GEO 中</td>
+</tr>
+<tr>
+<td>GEOPOS key member1 member2 …</td>
+<td>返回给定元素的经纬度信息</td>
+</tr>
+<tr>
+<td>GEODIST key member1 member2 M&#x2F;KM&#x2F;FT&#x2F;MI</td>
+<td>返回两个给定元素之间的距离</td>
+</tr>
+<tr>
+<td>GEORADIUS key longitude latitude radius distance</td>
+<td>获取指定位置附近 distance 范围内的其他元素，支持 ASC(由近到远)、DESC（由远到近）、Count(数量) 等参数</td>
+</tr>
+<tr>
+<td>GEORADIUSBYMEMBER key member radius distance</td>
+<td>类似于 GEORADIUS 命令，只是参照的中心点是 GEO 中的元素</td>
+</tr>
+</tbody></table>
+<p><strong>基本操作</strong> ：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; GEOADD personLocation 116.33 39.89 user1 116.34 39.90 user2 116.35 39.88 user3</span><br><span class="line">3</span><br><span class="line">&gt; GEOPOS personLocation user1</span><br><span class="line">116.3299986720085144</span><br><span class="line">39.89000061669732844</span><br><span class="line">&gt; GEODIST personLocation user1 user2 km</span><br><span class="line">1.4018</span><br></pre></td></tr></table></figure>
+
+<p>通过 Redis 可视化工具查看 <code>personLocation</code> ，果不其然，底层就是 Sorted Set。</p>
+<p>GEO 中存储的地理位置信息的经纬度数据通过 GeoHash 算法转换成了一个整数，这个整数作为 Sorted Set 的 score(权重参数)使用。</p>
+<p><img src="https://oss.javaguide.cn/github/javaguide/database/redis/image-20220721201545147.png"></p>
+<p><strong>获取指定位置范围内的其他元素</strong> ：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&gt; GEORADIUS personLocation 116.33 39.87 3 km</span><br><span class="line">user3</span><br><span class="line">user1</span><br><span class="line">&gt; GEORADIUS personLocation 116.33 39.87 2 km</span><br><span class="line">&gt; GEORADIUS personLocation 116.33 39.87 5 km</span><br><span class="line">user3</span><br><span class="line">user1</span><br><span class="line">user2</span><br><span class="line">&gt; GEORADIUSBYMEMBER personLocation user1 5 km</span><br><span class="line">user3</span><br><span class="line">user1</span><br><span class="line">user2</span><br><span class="line">&gt; GEORADIUSBYMEMBER personLocation user1 2 km</span><br><span class="line">user1</span><br><span class="line">user2</span><br></pre></td></tr></table></figure>
+
+<p><code>GEORADIUS</code> 命令的底层原理解析可以看看阿里的这篇文章：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903966061363207">Redis 到底是怎么实现“附近的人”这个功能的呢？</a> 。</p>
+<p><strong>移除元素</strong> ：</p>
+<p>GEO 底层是 Sorted Set ，你可以对 GEO 使用 Sorted Set 相关的命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; ZREM personLocation user1</span><br><span class="line">1</span><br><span class="line">&gt; ZRANGE personLocation 0 -1</span><br><span class="line">user3</span><br><span class="line">user2</span><br><span class="line">&gt; ZSCORE personLocation user2</span><br><span class="line">4069879562983946</span><br></pre></td></tr></table></figure>
+
+<h3 id="应用场景-2"><a href="#应用场景-2" class="headerlink" title="应用场景"></a>应用场景</h3><p><strong>需要管理使用地理空间数据的场景</strong></p>
+<ul>
+<li>举例：附近的人。</li>
+<li>相关命令: <code>GEOADD</code>、<code>GEORADIUS</code>、<code>GEORADIUSBYMEMBER</code> 。</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>Redis Data Structures ：<a target="_blank" rel="noopener" href="https://redis.com/redis-enterprise/data-structures/">https://redis.com/redis-enterprise/data-structures/</a> 。</li>
+<li>《Redis 深度历险：核心原理与应用实践》1.6 四两拨千斤——HyperLogLog</li>
+<li>布隆过滤器,位图,HyperLogLog：<a target="_blank" rel="noopener" href="https://hogwartsrico.github.io/2020/06/08/BloomFilter-HyperLogLog-BitMap/index.html">https://hogwartsrico.github.io/2020/06/08/BloomFilter-HyperLogLog-BitMap/index.html</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">阿泽</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://rongzhiy.github.io/2023/03/17/database/redis/redis-data-structures-02/">https://rongzhiy.github.io/2023/03/17/database/redis/redis-data-structures-02/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://rongzhiy.github.io" target="_blank">Rongzhiyのblog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Redis/">Redis</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/03/17/database/redis/redis-memory-fragmentation/"><img class="prev-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Redis 内存碎片详解</div></div></a></div><div class="next-post pull-right"><a href="/2023/03/17/database/redis/redis-data-structures-01/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Redis 5 种基本数据结构详解</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/03/17/database/nosql/" title="NoSQL基础知识总结"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">NoSQL基础知识总结</div></div></a></div><div><a href="/2023/03/17/database/redis/3-commonly-used-cache-read-and-write-strategies/" title="3种常用的缓存读写策略详解"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">3种常用的缓存读写策略详解</div></div></a></div><div><a href="/2023/03/17/database/redis/cache-basics/" title="缓存基础常见面试题总结(付费)"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">缓存基础常见面试题总结(付费)</div></div></a></div><div><a href="/2023/03/17/database/redis/redis-cluster/" title="Redis 集群详解(付费)"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">Redis 集群详解(付费)</div></div></a></div><div><a href="/2023/03/17/database/redis/redis-memory-fragmentation/" title="Redis 内存碎片详解"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">Redis 内存碎片详解</div></div></a></div><div><a href="/2023/03/17/database/redis/redis-data-structures-01/" title="Redis 5 种基本数据结构详解"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">Redis 5 种基本数据结构详解</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">阿泽</div><div class="author-info__description">Stay Hungry,Stay Foolish</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">223</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">23</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/rongzhiy"><i class="fab fa-github"></i><span>github</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/rongzhiy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:rongzhiy2735@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bitmap"><span class="toc-number">1.</span> <span class="toc-text">Bitmap</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.2.</span> <span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.3.</span> <span class="toc-text">应用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HyperLogLog"><span class="toc-number">2.</span> <span class="toc-text">HyperLogLog</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D-1"><span class="toc-number">2.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4-1"><span class="toc-number">2.2.</span> <span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.3.</span> <span class="toc-text">应用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Geospatial-index"><span class="toc-number">3.</span> <span class="toc-text">Geospatial index</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D-2"><span class="toc-number">3.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4-2"><span class="toc-number">3.2.</span> <span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="toc-number">3.3.</span> <span class="toc-text">应用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/maven/maven-core-concepts/" title="Maven 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Maven 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/maven/maven-core-concepts/" title="Maven 核心概念总结">Maven 核心概念总结</a><time datetime="2023-03-17T09:00:32.696Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/gradle/gradle-core-concepts/" title="Gradle 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gradle 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/gradle/gradle-core-concepts/" title="Gradle 核心概念总结">Gradle 核心概念总结</a><time datetime="2023-03-17T09:00:32.691Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/git/github-tips/" title="Github 实用小技巧总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Github 实用小技巧总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/git/github-tips/" title="Github 实用小技巧总结">Github 实用小技巧总结</a><time datetime="2023-03-17T09:00:32.687Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/git/git-intro/" title="Git 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/git/git-intro/" title="Git 核心概念总结">Git 核心概念总结</a><time datetime="2023-03-17T09:00:32.685Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/docker/docker-intro/" title="Docker 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Docker 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/docker/docker-intro/" title="Docker 核心概念总结">Docker 核心概念总结</a><time datetime="2023-03-17T09:00:32.681Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023  <i id="heartbeat" class="fa fas fa-heartbeat"></i> 阿泽</div><div class="framework-info"><span>框架 </span><a href="">Hexo</a></div></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer src="https://npm.elemecdn.com/jquery@latest/dist/jquery.min.js"></script><script defer data-pjax src="/js/cat.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

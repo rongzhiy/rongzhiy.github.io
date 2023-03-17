@@ -1,0 +1,204 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><div id="myscoll"></div><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>单元测试到底是什么？应该怎么做？ | Rongzhiyのblog</title><meta name="keywords" content="rongzhiy"><meta name="author" content="阿泽"><meta name="copyright" content="阿泽"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="本文重构完善自谈谈为什么写单元测试 - 键盘男 - 2016这篇文章。  何谓单元测试？维基百科是这样介绍单元测试的：  在计算机编程中，单元测试（Unit Testing）是针对程序模块（软件设计的最小单位）进行的正确性检验测试工作。 程序单元是应用的 最小可测试部件 。在过程化编程中，一个单元就是单个程序、函数、过程等；对于面向对象编程，最小单元就是方法，包括基类（超类）、抽象类、或者派生类">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单元测试到底是什么？应该怎么做？">
+<meta property="og:url" content="https://rongzhiy.github.io/2023/03/17/system-design/basis/unit-test/index.html">
+<meta property="og:site_name" content="Rongzhiyのblog">
+<meta property="og:description" content="本文重构完善自谈谈为什么写单元测试 - 键盘男 - 2016这篇文章。  何谓单元测试？维基百科是这样介绍单元测试的：  在计算机编程中，单元测试（Unit Testing）是针对程序模块（软件设计的最小单位）进行的正确性检验测试工作。 程序单元是应用的 最小可测试部件 。在过程化编程中，一个单元就是单个程序、函数、过程等；对于面向对象编程，最小单元就是方法，包括基类（超类）、抽象类、或者派生类">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2023-03-17T09:00:21.491Z">
+<meta property="article:modified_time" content="2023-03-16T07:55:48.000Z">
+<meta property="article:author" content="阿泽">
+<meta property="article:tag" content="rongzhiy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://rongzhiy.github.io/2023/03/17/system-design/basis/unit-test/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-16 15:55:48'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/cat.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">223</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">23</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Rongzhiyのblog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">单元测试到底是什么？应该怎么做？</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-17T09:00:21.491Z" title="发表于 2023-03-17 17:00:21">2023-03-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-16T07:55:48.000Z" title="更新于 2023-03-16 15:55:48">2023-03-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/">代码质量</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="单元测试到底是什么？应该怎么做？"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><blockquote>
+<p>本文重构完善自<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/fa41fb80d2b8">谈谈为什么写单元测试 - 键盘男 - 2016</a>这篇文章。</p>
+</blockquote>
+<h2 id="何谓单元测试？"><a href="#何谓单元测试？" class="headerlink" title="何谓单元测试？"></a>何谓单元测试？</h2><p>维基百科是这样介绍单元测试的：</p>
+<blockquote>
+<p>在计算机编程中，单元测试（Unit Testing）是针对程序模块（软件设计的最小单位）进行的正确性检验测试工作。</p>
+<p>程序单元是应用的 <strong>最小可测试部件</strong> 。在过程化编程中，一个单元就是单个程序、函数、过程等；对于面向对象编程，最小单元就是方法，包括基类（超类）、抽象类、或者派生类（子类）中的方法。</p>
+</blockquote>
+<p>由于每个单元有独立的逻辑，在做单元测试时，为了隔离外部依赖，确保这些依赖不影响验证逻辑，我们经常会用到 Fake、Stub 与 Mock 。</p>
+<p>关于 Fake、Mock 与 Stub 这几个概念的解读，可以看看这篇文章：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26942686">测试中 Fakes、Mocks 以及 Stubs 概念明晰 - 王下邀月熊 - 2018</a> 。</p>
+<h2 id="为什么需要单元测试？"><a href="#为什么需要单元测试？" class="headerlink" title="为什么需要单元测试？"></a>为什么需要单元测试？</h2><h3 id="为重构保驾护航"><a href="#为重构保驾护航" class="headerlink" title="为重构保驾护航"></a>为重构保驾护航</h3><p>我在<a href="./refactoring.md">重构</a>这篇文章中这样写到：</p>
+<blockquote>
+<p>单元测试可以为重构提供信心，降低重构的成本。我们要像重视生产代码那样，重视单元测试。</p>
+</blockquote>
+<p>每个开发者都会经历重构，重构后把代码改坏了的情况并不少见，很可能你只是修改了一个很简单的方法就导致系统出现了一个比较严重的错误。</p>
+<p>如果有了单元测试的话，就不会存在这个隐患了。写完一个类，把单元测试写了，确保这个类逻辑正确；写第二个类，单元测试…..写 100 个类，道理一样，每个类做到第一点“保证逻辑正确性”，100 个类拼在一起肯定不出问题。你大可以放心一边重构，一边运行 APP；而不是整体重构完，提心吊胆地 run。</p>
+<h3 id="提高代码质量"><a href="#提高代码质量" class="headerlink" title="提高代码质量"></a>提高代码质量</h3><p>由于每个单元有独立的逻辑，做单元测试时需要隔离外部依赖，确保这些依赖不影响验证逻辑。因为要把各种依赖分离，单元测试会促进工程进行组件拆分，整理工程依赖关系，更大程度减少代码耦合。这样写出来的代码，更好维护，更好扩展，从而提高代码质量。</p>
+<h3 id="减少-bug"><a href="#减少-bug" class="headerlink" title="减少 bug"></a>减少 bug</h3><p>一个机器，由各种细小的零件组成，如果其中某件零件坏了，机器运行故障。必须保证每个零件都按设计图要求的规格，机器才能正常运行。</p>
+<p>一个可单元测试的工程，会把业务、功能分割成规模更小、有独立的逻辑部件，称为单元。单元测试的目标，就是保证各个单元的逻辑正确性。单元测试保障工程各个“零件”按“规格”（需求）执行，从而保证整个“机器”（项目）运行正确，最大限度减少 bug。</p>
+<h3 id="快速定位-bug"><a href="#快速定位-bug" class="headerlink" title="快速定位 bug"></a>快速定位 bug</h3><p>如果程序有 bug，我们运行一次全部单元测试，找到不通过的测试，可以很快地定位对应的执行代码。修复代码后，运行对应的单元测试；如还不通过，继续修改，运行测试…..直到<strong>测试通过</strong>。</p>
+<h3 id="持续集成依赖单元测试"><a href="#持续集成依赖单元测试" class="headerlink" title="持续集成依赖单元测试"></a>持续集成依赖单元测试</h3><p>持续集成需要依赖单元测试，当持续集成服务自动构建新代码之后，会自动运行单元测试来发现代码错误。</p>
+<h2 id="谁逼你写单元测试？"><a href="#谁逼你写单元测试？" class="headerlink" title="谁逼你写单元测试？"></a>谁逼你写单元测试？</h2><h3 id="领导要求"><a href="#领导要求" class="headerlink" title="领导要求"></a>领导要求</h3><p>有些经验丰富的领导，或多或少都会要求团队写单元测试。对于有一定工作经验的队友，这要求挺合理；对于经验尚浅的、毕业生，恐怕要死要活了，连代码都写不好，还要写单元测试，are you kidding me？</p>
+<p>培训新人单元测试用法，是一项艰巨的任务。新人代码风格未形成，也不知道单元测试多重要，强制单元测试会让他们感到困惑，没办法按自己思路写代码。</p>
+<h3 id="大牛都写单元测试"><a href="#大牛都写单元测试" class="headerlink" title="大牛都写单元测试"></a>大牛都写单元测试</h3><p>国外很多家喻户晓的开源项目，都有大量单元测试。例如，<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=https://github.com/square/retrofit/tree/master/retrofit/src/test/java/retrofit2">retrofit</a>、<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=https://github.com/square/okhttp/tree/master/okhttp-tests/src/test/java/okhttp3">okhttp</a>、<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=https://github.com/JakeWharton/butterknife/tree/master/butterknife-compiler/src/test/java/butterknife">butterknife</a>…. 国外大牛都写单元测试，我们也写吧！</p>
+<p>很多读者都有这种想法，一开始满腔热血。当真要对自己项目单元测试时，便困难重重，很大原因是项目对单元测试不友好。最后只能对一些不痛不痒的工具类做单元测试，久而久之，当初美好愿望也不了了之。</p>
+<h3 id="保住面子"><a href="#保住面子" class="headerlink" title="保住面子"></a>保住面子</h3><p>都是有些许年经验的老鸟，还天天被测试同学追 bug，好意思么？花多一点时间写单元测试，确保没低级 bug，还能彰显大牛风范，何乐而不为？</p>
+<h3 id="心虚"><a href="#心虚" class="headerlink" title="心虚"></a>心虚</h3><p>笔者也是个不太相信自己代码的人，总觉得哪里会突然冒出莫名其妙的 bug，也怕别人不小心改了自己的代码（被害妄想症），新版本上线提心吊胆……花点时间写单元测试，有事没事跑一下测试，确保原逻辑没问题，至少能睡安稳一点。</p>
+<h2 id="TDD-测试驱动开发"><a href="#TDD-测试驱动开发" class="headerlink" title="TDD 测试驱动开发"></a>TDD 测试驱动开发</h2><h3 id="何谓-TDD？"><a href="#何谓-TDD？" class="headerlink" title="何谓 TDD？"></a>何谓 TDD？</h3><p>TDD 即 Test-Driven Development（ 测试驱动开发），这是敏捷开发的一项核心实践和技术，也是一种设计方法论。</p>
+<p>TDD 原理是开发功能代码之前，先编写测试用例代码，然后针对测试用例编写功能代码，使其能够通过。</p>
+<p>TDD 的节奏：“红 - 绿 - 重构”。</p>
+<p><img src="https://static001.geekbang.org/resource/image/09/7f/090e1fc6aff08b4aa66376f776c2337f.png"></p>
+<p>由于 TDD 对开发人员要求非常高，跟传统开发思维不一样，因此实施起来相当困难。</p>
+<p>TDD 在很多人眼中是不实用的，一来他们并不理解测试“驱动”开发的含义，但更重要的是，他们很少会做任务分解。而任务分解是做好 TDD 的关键点。只有把任务分解到可以测试的地步，才能够有针对性地写测试。</p>
+<h3 id="TDD-优缺点分析"><a href="#TDD-优缺点分析" class="headerlink" title="TDD 优缺点分析"></a>TDD 优缺点分析</h3><p>测试驱动开发有好处也有坏处。因为每个测试用例都是根据需求来的，或者说把一个大需求分解成若干小需求编写测试用例，所以测试用例写出来后，开发者写的执行代码，必须满足测试用例。如果测试不通过，则修改执行代码，直到测试用例通过。</p>
+<p><strong>优点</strong> ：</p>
+<ol>
+<li>帮你整理需求，梳理思路；</li>
+<li>帮你设计出更合理的接口（空想的话很容易设计出屎）；</li>
+<li>减小代码出现 bug 的概率；</li>
+<li>提高开发效率（前提是正确且熟练使用 TDD）。</li>
+</ol>
+<p><strong>缺点</strong> ：</p>
+<ol>
+<li>能用好 TDD 的人非常少，看似简单，实则门槛很高；</li>
+<li>投入开发资源（时间和精力）通常会更多；</li>
+<li>由于测试用例在未进行代码设计前写；很有可能限制开发者对代码整体设计；</li>
+<li>可能引起开发人员不满情绪，我觉得这点很严重，毕竟不是人人都喜欢单元测试，尽管单元测试会带给我们相当多的好处。</li>
+</ol>
+<p>相关阅读：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24997923">如何用正确的姿势打开 TDD？ - 陈天 - 2017</a>  。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>单元测试确实会带给你相当多的好处，但不是立刻体验出来。正如买重疾保险，交了很多保费，没病没痛，十几年甚至几十年都用不上，最好就是一辈子用不上理赔，身体健康最重要。单元测试也一样，写了可以买个放心，对代码的一种保障，有 bug 尽快测出来，没 bug 就最好，总不能说“写那么多单元测试，结果测不出 bug，浪费时间”吧？</p>
+<p>以下是个人对单元测试一些建议：</p>
+<blockquote>
+<ul>
+<li>越重要的代码，越要写单元测试；</li>
+<li>代码做不到单元测试，多思考如何改进，而不是放弃；</li>
+<li>边写业务代码，边写单元测试，而不是完成整个新功能后再写；</li>
+<li>多思考如何改进、简化测试代码。</li>
+<li>测试代码需要随着生产代码的演进而重构或者修改，如果测试不能保持整洁，只会越来越难修改。</li>
+</ul>
+</blockquote>
+<p>作为一名经验丰富的程序员，写单元测试更多的是<strong>对自己的代码负责</strong>。有测试用例的代码，别人更容易看懂，以后别人接手你的代码时，也可能放心做改动。</p>
+<p><strong>多敲代码实践，多跟有单元测试经验的工程师交流</strong>，你会发现写单元测试获得的收益会更多。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">阿泽</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://rongzhiy.github.io/2023/03/17/system-design/basis/unit-test/">https://rongzhiy.github.io/2023/03/17/system-design/basis/unit-test/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://rongzhiy.github.io" target="_blank">Rongzhiyのblog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/03/17/system-design/design-pattern/"><img class="prev-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">设计模式常见面试题总结</div></div></a></div><div class="next-post pull-right"><a href="/2023/03/17/system-design/basis/software-engineering/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">软件工程简明教程</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">阿泽</div><div class="author-info__description">Stay Hungry,Stay Foolish</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">223</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">23</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/rongzhiy"><i class="fab fa-github"></i><span>github</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/rongzhiy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:rongzhiy2735@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%95%E8%B0%93%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">何谓单元测试？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">为什么需要单元测试？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E9%87%8D%E6%9E%84%E4%BF%9D%E9%A9%BE%E6%8A%A4%E8%88%AA"><span class="toc-number">2.1.</span> <span class="toc-text">为重构保驾护航</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E9%AB%98%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F"><span class="toc-number">2.2.</span> <span class="toc-text">提高代码质量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%8F%E5%B0%91-bug"><span class="toc-number">2.3.</span> <span class="toc-text">减少 bug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E5%AE%9A%E4%BD%8D-bug"><span class="toc-number">2.4.</span> <span class="toc-text">快速定位 bug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E4%BE%9D%E8%B5%96%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95"><span class="toc-number">2.5.</span> <span class="toc-text">持续集成依赖单元测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%81%E9%80%BC%E4%BD%A0%E5%86%99%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">谁逼你写单元测试？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%86%E5%AF%BC%E8%A6%81%E6%B1%82"><span class="toc-number">3.1.</span> <span class="toc-text">领导要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E7%89%9B%E9%83%BD%E5%86%99%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95"><span class="toc-number">3.2.</span> <span class="toc-text">大牛都写单元测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%9D%E4%BD%8F%E9%9D%A2%E5%AD%90"><span class="toc-number">3.3.</span> <span class="toc-text">保住面子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%83%E8%99%9A"><span class="toc-number">3.4.</span> <span class="toc-text">心虚</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TDD-%E6%B5%8B%E8%AF%95%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91"><span class="toc-number">4.</span> <span class="toc-text">TDD 测试驱动开发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%95%E8%B0%93-TDD%EF%BC%9F"><span class="toc-number">4.1.</span> <span class="toc-text">何谓 TDD？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TDD-%E4%BC%98%E7%BC%BA%E7%82%B9%E5%88%86%E6%9E%90"><span class="toc-number">4.2.</span> <span class="toc-text">TDD 优缺点分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/maven/maven-core-concepts/" title="Maven 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Maven 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/maven/maven-core-concepts/" title="Maven 核心概念总结">Maven 核心概念总结</a><time datetime="2023-03-17T09:00:32.696Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/gradle/gradle-core-concepts/" title="Gradle 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gradle 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/gradle/gradle-core-concepts/" title="Gradle 核心概念总结">Gradle 核心概念总结</a><time datetime="2023-03-17T09:00:32.691Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/git/github-tips/" title="Github 实用小技巧总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Github 实用小技巧总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/git/github-tips/" title="Github 实用小技巧总结">Github 实用小技巧总结</a><time datetime="2023-03-17T09:00:32.687Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/git/git-intro/" title="Git 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/git/git-intro/" title="Git 核心概念总结">Git 核心概念总结</a><time datetime="2023-03-17T09:00:32.685Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/docker/docker-intro/" title="Docker 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Docker 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/docker/docker-intro/" title="Docker 核心概念总结">Docker 核心概念总结</a><time datetime="2023-03-17T09:00:32.681Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023  <i id="heartbeat" class="fa fas fa-heartbeat"></i> 阿泽</div><div class="framework-info"><span>框架 </span><a href="">Hexo</a></div></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer src="https://npm.elemecdn.com/jquery@latest/dist/jquery.min.js"></script><script defer data-pjax src="/js/cat.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
