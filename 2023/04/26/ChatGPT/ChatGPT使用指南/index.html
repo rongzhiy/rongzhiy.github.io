@@ -1,0 +1,200 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><div id="myscoll"></div><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ChatGPT使用指南 | Rongzhiyのblog</title><meta name="keywords" content="ChatGPT"><meta name="author" content="阿泽"><meta name="copyright" content="阿泽"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一、基本术语 什么是人工智能？ AI 或人工智能是我们试图让计算机像人类一样思考、学习和理解的领域，因此它们将能够编写、创建内容、解决复杂问题、绘图，甚至编码和编程。 什么是自然语言处理？ NLP，或自然语言处理，是 AI 中的一个领域，我们在其中训练计算机并使计算机理解人类语言。所以如果我们问它一个问题，它会理解并回答。简单来说就是让机器说人话。 什么是 GPT？ GPT，即生成式预训练变压器，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ChatGPT使用指南">
+<meta property="og:url" content="https://rongzhiy.github.io/2023/04/26/ChatGPT/ChatGPT%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="Rongzhiyのblog">
+<meta property="og:description" content="一、基本术语 什么是人工智能？ AI 或人工智能是我们试图让计算机像人类一样思考、学习和理解的领域，因此它们将能够编写、创建内容、解决复杂问题、绘图，甚至编码和编程。 什么是自然语言处理？ NLP，或自然语言处理，是 AI 中的一个领域，我们在其中训练计算机并使计算机理解人类语言。所以如果我们问它一个问题，它会理解并回答。简单来说就是让机器说人话。 什么是 GPT？ GPT，即生成式预训练变压器，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2023-04-26T12:00:00.000Z">
+<meta property="article:modified_time" content="2023-05-28T05:21:22.784Z">
+<meta property="article:author" content="阿泽">
+<meta property="article:tag" content="ChatGPT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://rongzhiy.github.io/2023/04/26/ChatGPT/ChatGPT%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-28 13:21:22'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/cat.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">188</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">44</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Rongzhiyのblog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">ChatGPT使用指南</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-26T12:00:00.000Z" title="发表于 2023-04-26 20:00:00">2023-04-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-28T05:21:22.784Z" title="更新于 2023-05-28 13:21:22">2023-05-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ChatGPT/">ChatGPT</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="ChatGPT使用指南"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><p><strong>一、基本术语</strong></p>
+<p><strong>什么是人工智能？</strong></p>
+<p>AI 或人工智能是我们试图让计算机像人类一样思考、学习和理解的领域，因此它们将能够编写、创建内容、解决复杂问题、绘图，甚至编码和编程。</p>
+<p><strong>什么是自然语言处理？</strong></p>
+<p>NLP，或自然语言处理，是 AI 中的一个领域，我们在其中训练计算机并使<strong>计算机理解人类语言</strong>。所以如果我们问它一个问题，它会理解并回答。简单来说就是让机器说人话。</p>
+<p><strong>什么是 GPT？</strong></p>
+<p>GPT，即生成式预训练变压器，是一种 NLP AI 模型。<br>这个想法很简单，在 AI 中，我们训练计算机执行特定任务，当我们完成后，我们将输出称为 AI 模型。<br>在这里，GPT 是经过训练以理解人类语言的 NLP 模型的名称。<a target="_blank" rel="noopener" href="https://chat.openai.com/chat">ChatGPT</a>使用了多个版本，例如 GPT-2、GPT-3 、3.5 、4。</p>
+<p><strong>二、如何使用</strong></p>
+<p><strong>❤通用对话机器人免费网站清单</strong></p>
+<p><strong>1、网站共享ChatGPT账号（极力推荐）</strong></p>
+<p><strong>[该类型的内容暂不支持下载]</strong></p>
+<p><strong>2、国内阉割版镜像</strong></p>
+<p>  <a target="_blank" rel="noopener" href="https://static.vqlai.com/apps/vchat/">https://static.vqlai.com/apps/vchat/</a><br>  <a target="_blank" rel="noopener" href="https://cosplay.millionlearn.cn/#/chat">https://cosplay.millionlearn.cn/#/chat</a><br>  <a target="_blank" rel="noopener" href="https://chat.extkj.cn/#/">https://chat.extkj.cn/#/</a><br> <a target="_blank" rel="noopener" href="https://chat.aidutu.cn/#/chat/1002"> https://chat.aidutu.cn/#/chat/1002</a><br>  <a target="_blank" rel="noopener" href="https://chat.68686.ltd/">https://chat.68686.ltd/</a><br>  <a target="_blank" rel="noopener" href="https://random1.aichatos.com/#/chat/1682249398724">https://random1.aichatos.com/#/chat/1682249398724</a></p>
+<p>可以语音输入的：<br><a target="_blank" rel="noopener" href="https://175.178.88.119/#/ChatHome">https://175.178.88.119/#/ChatHome</a></p>
+<p><strong>❤讯飞星火</strong></p>
+<p><a target="_blank" rel="noopener" href="https://xinghuo.xfyun.cn/desk">https://xinghuo.xfyun.cn/desk</a></p>
+<p><strong>❤百度文心</strong></p>
+<p><a target="_blank" rel="noopener" href="https://yiyan.baidu.com/">https://yiyan.baidu.com/</a></p>
+<p><strong>❤BingGPT</strong></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/dice2o/BingGPT">https://github.com/dice2o/BingGPT</a></p>
+<p>或者直接下载：</p>
+<p><strong>[BingGPT-0.3.3-win32-x64-Setup.exe]</strong><br><img src="https://cdn.nlark.com/yuque/0/2023/png/1143997/1685250806932-be65ea20-bc68-4490-b6d1-7b1eb92cc365.png#averageHue=%23fefefd&id=tIqQP&originHeight=605&originWidth=1265&originalType=binary&ratio=1&rotation=0&showTitle=false&status=done&style=none&title="></p>
+<table>
+<thead>
+<tr>
+<th><img src="https://cdn.nlark.com/yuque/0/2023/png/1143997/1685250807273-4690cb29-f330-4c89-83d8-9641045eb7d0.png#averageHue=%232f2f2f&id=chUtl&originHeight=768&originWidth=596&originalType=binary&ratio=1&rotation=0&showTitle=false&status=done&style=none&title="></th>
+<th><img src="https://cdn.nlark.com/yuque/0/2023/png/1143997/1685250807519-7a73ff3b-8991-41cf-9f4f-eba6ec19f5aa.png#averageHue=%23323232&id=ZEW0W&originHeight=768&originWidth=596&originalType=binary&ratio=1&rotation=0&showTitle=false&status=done&style=none&title="></th>
+</tr>
+</thead>
+</table>
+<p>左边适合长对话聊天，持续输出。右边适合写小短文。</p>
+<p><strong>❤面向未来的智能化生产力工具</strong></p>
+<p><a target="_blank" rel="noopener" href="https://verse-cdn.yinxiang.com/product/v/verse/index.html">https://verse-cdn.yinxiang.com/product/v/verse/index.html</a></p>
+<p><strong>❤AI搜索引擎</strong></p>
+<p><strong>[该类型的内容暂不支持下载]</strong></p>
+<p><strong>❤Edge插件</strong></p>
+<p><strong>ChatGPT Sidebar</strong></p>
+<p><a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/difoiogjjojoaoomphldepapgpbgkhkb">https://chrome.google.com/webstore/detail/difoiogjjojoaoomphldepapgpbgkhkb</a></p>
+<p><strong>ChatHub是一个chatbot聚合客户端</strong></p>
+<p><a target="_blank" rel="noopener" href="https://microsoftedge.microsoft.com/addons/detail/chathub-allinone-chat/kdlmggoacmfoombiokflpeompajfljga">https://microsoftedge.microsoft.com/addons/detail/chathub-allinone-chat/kdlmggoacmfoombiokflpeompajfljga</a></p>
+<p><strong>使得ChatGPT联网</strong></p>
+<p><a target="_blank" rel="noopener" href="https://microsoftedge.microsoft.com/addons/search/webchatgpt">https://microsoftedge.microsoft.com/addons/search/webchatgpt</a></p>
+<p><strong>解决ChatGPT网络问题</strong></p>
+<p><a target="_blank" rel="noopener" href="https://greasyfork.org/zh-CN/scripts/462804-keepchatgpt">https://greasyfork.org/zh-CN/scripts/462804-keepchatgpt</a></p>
+<p><strong>语音输入输出</strong></p>
+<p><a target="_blank" rel="noopener" href="https://microsoftedge.microsoft.com/addons/detail/voicewave-voice-control/emlfpgnpefmloajnkkhpklcapghmgmae">https://microsoftedge.microsoft.com/addons/detail/voicewave-voice-control/emlfpgnpefmloajnkkhpklcapghmgmae</a><br><a target="_blank" rel="noopener" href="https://greasyfork.org/en/scripts/459890-talkgpt">https://greasyfork.org/en/scripts/459890-talkgpt</a></p>
+<p><strong>可语音对话</strong></p>
+<p><a target="_blank" rel="noopener" href="https://175.178.88.119/#/ChatHome">https://175.178.88.119/#/ChatHome</a></p>
+<p><strong>三、如何学会问问题！（使用样例）</strong></p>
+<p><strong>为了让ChatGPT能更好地完成你的任务，你需要准确描述你的任务才能得到更好的答案！下面是一些参考：</strong></p>
+<p><strong>prompt</strong><br><a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/aiprm-for-chatgpt/ojnbohmppadfgpejeebfnmnknjdlckgj">https://chrome.google.com/webstore/detail/aiprm-for-chatgpt/ojnbohmppadfgpejeebfnmnknjdlckgj</a></p>
+<p><strong>一般最好的描述应包含下面几个部分：</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/jpeg/1143997/1685250807819-3fea1162-5ac2-4f11-831d-12dfba372e4f.jpeg#averageHue=%23f3f2e7&id=UayGi&originHeight=467&originWidth=785&originalType=binary&ratio=1&rotation=0&showTitle=false&status=done&style=none&title="></p>
+<p><strong>一些有趣的案例，点击下方链接查看</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/570729170">ChatGPT 有哪些神奇的使用方式? - 知乎</a></p>
+<p><strong>一些问题回复截图</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/1143997/1685250808442-71895e58-b051-4181-99a8-57fa432b5d43.png#averageHue=%23f5f3ed&id=dsoYT&originHeight=4157&originWidth=1265&originalType=binary&ratio=1&rotation=0&showTitle=false&status=done&style=none&title="></p>
+<p><a target="_blank" rel="noopener" href="https://learningprompt.wiki/docs/chatGPT/tutorial-basics/%25E5%259F%25BA%25E6%259C%25AC%25E4%25BD%25BF%25E7%2594%25A8%25E5%259C%25BA%25E6%2599%25AF%2520&%2520%25E4%25BD%25BF%25E7%2594%25A8%25E6%258A%2580%25E5%25B7%25A7/%25E5%259C%25BA%25E6%2599%25AF4%25EF%25BC%259A%25E6%2597%25A0%25E4%25B8%25AD%25E7%2594%259F%25E6%259C%2589%25E2%2580%2594%25E2%2580%2594%25E5%2586%2599%25E4%25BB%25A3%25E7%25A0%2581">https://learningprompt.wiki/docs/chatGPT/tutorial-basics/%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%20&%20%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/%E5%9C%BA%E6%99%AF4%EF%BC%9A%E6%97%A0%E4%B8%AD%E7%94%9F%E6%9C%89%E2%80%94%E2%80%94%E5%86%99%E4%BB%A3%E7%A0%81</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">阿泽</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://rongzhiy.github.io/2023/04/26/ChatGPT/ChatGPT%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">https://rongzhiy.github.io/2023/04/26/ChatGPT/ChatGPT使用指南/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://rongzhiy.github.io" target="_blank">Rongzhiyのblog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ChatGPT/">ChatGPT</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/04/12/ChatGPT/ChatGPT-free/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">国内免费ChatGPT可用网站列表</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/04/12/ChatGPT/ChatGPT-free/" title="国内免费ChatGPT可用网站列表"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-12</div><div class="title">国内免费ChatGPT可用网站列表</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">阿泽</div><div class="author-info__description">Stay Hungry,Stay Foolish</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">188</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">44</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/rongzhiy"><i class="fab fa-github"></i><span>github</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/rongzhiy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:rongzhiy2735@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/04/26/ChatGPT/ChatGPT%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="ChatGPT使用指南"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ChatGPT使用指南"/></a><div class="content"><a class="title" href="/2023/04/26/ChatGPT/ChatGPT%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="ChatGPT使用指南">ChatGPT使用指南</a><time datetime="2023-04-26T12:00:00.000Z" title="发表于 2023-04-26 20:00:00">2023-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/12/ChatGPT/ChatGPT-free/" title="国内免费ChatGPT可用网站列表"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="国内免费ChatGPT可用网站列表"/></a><div class="content"><a class="title" href="/2023/04/12/ChatGPT/ChatGPT-free/" title="国内免费ChatGPT可用网站列表">国内免费ChatGPT可用网站列表</a><time datetime="2023-04-12T04:38:00.740Z" title="发表于 2023-04-12 12:38:00">2023-04-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/maven/maven-core-concepts/" title="Maven 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Maven 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/maven/maven-core-concepts/" title="Maven 核心概念总结">Maven 核心概念总结</a><time datetime="2023-03-17T09:00:32.696Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/gradle/gradle-core-concepts/" title="Gradle 核心概念总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gradle 核心概念总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/gradle/gradle-core-concepts/" title="Gradle 核心概念总结">Gradle 核心概念总结</a><time datetime="2023-03-17T09:00:32.691Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/tools/git/github-tips/" title="Github 实用小技巧总结"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Github 实用小技巧总结"/></a><div class="content"><a class="title" href="/2023/03/17/tools/git/github-tips/" title="Github 实用小技巧总结">Github 实用小技巧总结</a><time datetime="2023-03-17T09:00:32.687Z" title="发表于 2023-03-17 17:00:32">2023-03-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023  <i id="heartbeat" class="fa fas fa-heartbeat"></i> 阿泽</div><div class="framework-info"><span>框架 </span><a href="">Hexo</a></div></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer src="https://npm.elemecdn.com/jquery@latest/dist/jquery.min.js"></script><script defer data-pjax src="/js/cat.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
