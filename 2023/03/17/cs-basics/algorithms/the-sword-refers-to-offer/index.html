@@ -1,23 +1,23 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><div id="myscoll"></div><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>剑指offer部分编程题 | Rongzhiyのblog</title><meta name="keywords" content="算法"><meta name="author" content="阿泽"><meta name="copyright" content="阿泽"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="斐波那契数列题目描述：  大家都知道斐波那契数列，现在要求输入一个整数n，请你输出斐波那契数列的第n项。n&lt;&#x3D;39 问题分析： 可以肯定的是这一题通过递归的方式是肯定能做出来，但是这样会有一个很大的问题，那就是递归大量的重复计算会导致内存溢出。另外可以使用迭代法，用fn1和fn2保存计算过程中的结果，并复用起来。下面我会把两个方法示例代码都给出来并给出两个方法的运行时间对比。 示例">
+<!DOCTYPE html><html lang="zh-CN" data-theme="bright"><head><div id="myscoll"></div><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>剑指offer部分编程题 | Rongzhiyのblog</title><meta name="keywords" content="算法"><meta name="author" content="阿泽"><meta name="copyright" content="阿泽"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="斐波那契数列题目描述：  大家都知道斐波那契数列，现在要求输入一个整数n，请你输出斐波那契数列的第n项。n&lt;&#x3D;39 问题分析： 可以肯定的是这一题通过递归的方式是肯定能做出来，但是这样会有一个很大的问题，那就是递归大量的重复计算会导致内存溢出。另外可以使用迭代法，用fn1和fn2保存计算过程中的结果，并复用起来。下面我会把两个方法示例代码都给出来并给出两个方法的运行时间对比。 示例">
 <meta property="og:type" content="article">
 <meta property="og:title" content="剑指offer部分编程题">
 <meta property="og:url" content="https://rongzhiy.github.io/2023/03/17/cs-basics/algorithms/the-sword-refers-to-offer/index.html">
 <meta property="og:site_name" content="Rongzhiyのblog">
 <meta property="og:description" content="斐波那契数列题目描述：  大家都知道斐波那契数列，现在要求输入一个整数n，请你输出斐波那契数列的第n项。n&lt;&#x3D;39 问题分析： 可以肯定的是这一题通过递归的方式是肯定能做出来，但是这样会有一个很大的问题，那就是递归大量的重复计算会导致内存溢出。另外可以使用迭代法，用fn1和fn2保存计算过程中的结果，并复用起来。下面我会把两个方法示例代码都给出来并给出两个方法的运行时间对比。 示例">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008ApSknly1hhbjyp7zrtj32yo1o0kjm.jpg">
 <meta property="article:published_time" content="2023-03-17T08:59:51.565Z">
 <meta property="article:modified_time" content="2023-03-16T07:55:48.000Z">
 <meta property="article:author" content="阿泽">
 <meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://rongzhiy.github.io/2023/03/17/cs-basics/algorithms/the-sword-refers-to-offer/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008ApSknly1hhbjyp7zrtj32yo1o0kjm.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://rongzhiy.github.io/2023/03/17/cs-basics/algorithms/the-sword-refers-to-offer/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
   root: '/',
   algolia: undefined,
-  localSearch: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
   translate: undefined,
   noticeOutdate: undefined,
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  highlight: undefined,
   copy: {
     success: '复制成功',
     error: '复制错误',
@@ -139,17 +139,40 @@
           document.documentElement.classList.remove('hide-aside')
         }
       }
-    })(window)</script><link rel="stylesheet" href="/css/cat.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">91</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Rongzhiyのblog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">剑指offer部分编程题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-17T08:59:51.565Z" title="发表于 2023-03-17 16:59:51">2023-03-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-16T07:55:48.000Z" title="更新于 2023-03-16 15:55:48">2023-03-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="剑指offer部分编程题"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><h2 id="斐波那契数列"><a href="#斐波那契数列" class="headerlink" title="斐波那契数列"></a>斐波那契数列</h2><p><strong>题目描述：</strong> </p>
+    })(window)</script><link rel="stylesheet" href="/css/cat.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">92</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Rongzhiyのblog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">剑指offer部分编程题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-17T08:59:51.565Z" title="发表于 2023-03-17 16:59:51">2023-03-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-16T07:55:48.000Z" title="更新于 2023-03-16 15:55:48">2023-03-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>19分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="剑指offer部分编程题"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><h2 id="斐波那契数列"><a href="#斐波那契数列" class="headerlink" title="斐波那契数列"></a>斐波那契数列</h2><p><strong>题目描述：</strong> </p>
 <p>大家都知道斐波那契数列，现在要求输入一个整数n，请你输出斐波那契数列的第n项。<br>n&lt;&#x3D;39</p>
 <p><strong>问题分析：</strong></p>
 <p>可以肯定的是这一题通过递归的方式是肯定能做出来，但是这样会有一个很大的问题，那就是递归大量的重复计算会导致内存溢出。另外可以使用迭代法，用fn1和fn2保存计算过程中的结果，并复用起来。下面我会把两个方法示例代码都给出来并给出两个方法的运行时间对比。</p>
 <p><strong>示例代码：</strong></p>
 <p>采用迭代法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">Fibonacci</span><span class="params">(<span class="type">int</span> number)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (number &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (number == <span class="number">1</span> || number == <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> <span class="variable">first</span> <span class="operator">=</span> <span class="number">1</span>, second = <span class="number">1</span>, third = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">3</span>; i &lt;= number; i++) &#123;</span><br><span class="line">        third = first + second;</span><br><span class="line">        first = second;</span><br><span class="line">        second = third;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> third;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">int Fibonacci(int number) &#123;
+    if (number &lt;= 0) &#123;
+        return 0;
+    &#125;
+    if (number == 1 || number == 2) &#123;
+        return 1;
+    &#125;
+    int first = 1, second = 1, third = 0;
+    for (int i = 3; i &lt;= number; i++) &#123;
+        third = first + second;
+        first = second;
+        second = third;
+    &#125;
+    return third;
+&#125;
+</code></pre>
 <p>采用递归：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">Fibonacci</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">1</span>||n==<span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Fibonacci(n - <span class="number">2</span>) + Fibonacci(n - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">public int Fibonacci(int n) &#123;
+    if (n &lt;= 0) &#123;
+        return 0;
+    &#125;
+    if (n == 1||n==2) &#123;
+        return 1;
+    &#125;
 
+    return Fibonacci(n - 2) + Fibonacci(n - 1);
+&#125;
+</code></pre>
 <h2 id="跳台阶问题"><a href="#跳台阶问题" class="headerlink" title="跳台阶问题"></a>跳台阶问题</h2><p><strong>题目描述：</strong></p>
 <p>一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法。</p>
 <p><strong>问题分析：</strong></p>
@@ -164,15 +187,34 @@
 <p><strong>所以这道题其实就是斐波那契数列的问题。</strong></p>
 <p>代码只需要在上一题的代码稍做修改即可。和上一题唯一不同的就是这一题的初始元素变为 1 2 3 5 8…..而上一题为1 1 2  3 5 …….。另外这一题也可以用递归做，但是递归效率太低，所以我这里只给出了迭代方式的代码。</p>
 <p><strong>示例代码：</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">jumpFloor</span><span class="params">(<span class="type">int</span> number)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (number &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (number == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (number == <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> <span class="variable">first</span> <span class="operator">=</span> <span class="number">1</span>, second = <span class="number">2</span>, third = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">3</span>; i &lt;= number; i++) &#123;</span><br><span class="line">        third = first + second;</span><br><span class="line">        first = second;</span><br><span class="line">        second = third;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> third;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">int jumpFloor(int number) &#123;
+    if (number &lt;= 0) &#123;
+        return 0;
+    &#125;
+    if (number == 1) &#123;
+        return 1;
+    &#125;
+    if (number == 2) &#123;
+        return 2;
+    &#125;
+    int first = 1, second = 2, third = 0;
+    for (int i = 3; i &lt;= number; i++) &#123;
+        third = first + second;
+        first = second;
+        second = third;
+    &#125;
+    return third;
+&#125;
+</code></pre>
 <h2 id="变态跳台阶问题"><a href="#变态跳台阶问题" class="headerlink" title="变态跳台阶问题"></a>变态跳台阶问题</h2><p><strong>题目描述：</strong></p>
 <p>一只青蛙一次可以跳上1级台阶，也可以跳上2级……它也可以跳上n级。求该青蛙跳上一个n级的台阶总共有多少种跳法。</p>
 <p><strong>问题分析：</strong></p>
 <p>假设n&gt;&#x3D;2，第一步有n种跳法：跳1级、跳2级、到跳n级<br>跳1级，剩下n-1级，则剩下跳法是f(n-1)<br>跳2级，剩下n-2级，则剩下跳法是f(n-2)<br>……<br>跳n-1级，剩下1级，则剩下跳法是f(1)<br>跳n级，剩下0级，则剩下跳法是f(0)<br>所以在n&gt;&#x3D;2的情况下：<br>f(n)&#x3D;f(n-1)+f(n-2)+…+f(1)<br>因为f(n-1)&#x3D;f(n-2)+f(n-3)+…+f(1)<br>所以f(n)&#x3D;2<em>f(n-1) 又f(1)&#x3D;1,所以可得*<em>f(n)&#x3D;2^(number-1)</em></em></p>
 <p><strong>示例代码：</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">JumpFloorII</span><span class="params">(<span class="type">int</span> number)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> &lt;&lt; --number;<span class="comment">//2^(number-1)用位移操作进行，更快</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">int JumpFloorII(int number) &#123;
+    return 1 &lt;&lt; --number;//2^(number-1)用位移操作进行，更快
+&#125;
+</code></pre>
 <p><strong>补充：</strong></p>
 <p>java中有三种移位运算符：</p>
 <ol>
@@ -180,9 +222,10 @@
 <li>“&gt;&gt;”:     <strong>右移运算符</strong>，等同于除2的n次方</li>
 <li>“&gt;&gt;&gt;” :  <strong>无符号右移运算符</strong>，不管移动前最高位是0还是1，右移后左侧产生的空位部分都以0来填充。与&gt;&gt;类似。</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">16</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> a &lt;&lt; <span class="number">2</span>;<span class="comment">//左移2，等同于16 * 2的2次方，也就是16 * 4</span></span><br><span class="line"><span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> a &gt;&gt; <span class="number">2</span>;<span class="comment">//右移2，等同于16 / 2的2次方，也就是16 / 4</span></span><br></pre></td></tr></table></figure>
-
-
+<pre><code class="java">int a = 16;
+int b = a &lt;&lt; 2;//左移2，等同于16 * 2的2次方，也就是16 * 4
+int c = a &gt;&gt; 2;//右移2，等同于16 / 2的2次方，也就是16 / 4
+</code></pre>
 <h2 id="二维数组查找"><a href="#二维数组查找" class="headerlink" title="二维数组查找"></a>二维数组查找</h2><p><strong>题目描述：</strong></p>
 <p>在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。</p>
 <p><strong>问题解析：</strong></p>
@@ -191,8 +234,23 @@
 <p>矩阵是有序的，从左下角来看，向上数字递减，向右数字递增，<br>   因此从左下角开始查找，当要查找数字比左下角数字大时。右移<br>    要查找数字比左下角数字小时，上移。这样找的速度最快。</p>
 </blockquote>
 <p><strong>示例代码：</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span> target, <span class="type">int</span> [][] array)</span> &#123;</span><br><span class="line">    <span class="comment">//基本思路从左下角开始找，这样速度最快</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">row</span> <span class="operator">=</span> array.length-<span class="number">1</span>;<span class="comment">//行</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">column</span> <span class="operator">=</span> <span class="number">0</span>;<span class="comment">//列</span></span><br><span class="line">    <span class="comment">//当行数大于0，当前列数小于总列数时循环条件成立</span></span><br><span class="line">    <span class="keyword">while</span>((row &gt;= <span class="number">0</span>)&amp;&amp; (column&lt; array[<span class="number">0</span>].length))&#123;</span><br><span class="line">        <span class="keyword">if</span>(array[row][column] &gt; target)&#123;</span><br><span class="line">            row--;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(array[row][column] &lt; target)&#123;</span><br><span class="line">            column++;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">public boolean Find(int target, int [][] array) &#123;
+    //基本思路从左下角开始找，这样速度最快
+    int row = array.length-1;//行
+    int column = 0;//列
+    //当行数大于0，当前列数小于总列数时循环条件成立
+    while((row &gt;= 0)&amp;&amp; (column&lt; array[0].length))&#123;
+        if(array[row][column] &gt; target)&#123;
+            row--;
+        &#125;else if(array[row][column] &lt; target)&#123;
+            column++;
+        &#125;else&#123;
+            return true;
+        &#125;
+    &#125;
+    return false;
+&#125;
+</code></pre>
 <h2 id="替换空格"><a href="#替换空格" class="headerlink" title="替换空格"></a>替换空格</h2><p><strong>题目描述：</strong></p>
 <p>请实现一个函数，将一个字符串中的空格替换成“%20”。例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。</p>
 <p><strong>问题分析：</strong></p>
@@ -200,30 +258,125 @@
 <p>或者最简单的方法就是利用：replaceAll(String regex,String replacement)方法了，一行代码就可以解决。</p>
 <p><strong>示例代码：</strong></p>
 <p>常规做法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">replaceSpace</span><span class="params">(StringBuffer str)</span> &#123;</span><br><span class="line">    <span class="type">StringBuffer</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; str.toString().length(); i++) &#123;</span><br><span class="line">        <span class="type">char</span> <span class="variable">b</span> <span class="operator">=</span> str.charAt(i);</span><br><span class="line">        <span class="keyword">if</span>(String.valueOf(b).equals(<span class="string">&quot; &quot;</span>))&#123;</span><br><span class="line">            out.append(<span class="string">&quot;%20&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            out.append(b);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> out.toString();     </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">public String replaceSpace(StringBuffer str) &#123;
+    StringBuffer out = new StringBuffer();
+    for (int i = 0; i &lt; str.toString().length(); i++) &#123;
+        char b = str.charAt(i);
+        if(String.valueOf(b).equals(&quot; &quot;))&#123;
+            out.append(&quot;%20&quot;);
+        &#125;else&#123;
+            out.append(b);
+        &#125;
+    &#125;
+    return out.toString();     
+&#125;
+</code></pre>
 <p>一行代码解决：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">replaceSpace</span><span class="params">(StringBuffer str)</span> &#123;</span><br><span class="line">    <span class="comment">//return str.toString().replaceAll(&quot; &quot;, &quot;%20&quot;);</span></span><br><span class="line">    <span class="comment">//public String replaceAll(String regex,String replacement)</span></span><br><span class="line">    <span class="comment">//用给定的替换替换与给定的regular expression匹配的此字符串的每个子字符串。 </span></span><br><span class="line">    <span class="comment">//\ 转义字符. 如果你要使用 &quot;\&quot; 本身, 则应该使用 &quot;\\&quot;. String类型中的空格用“\s”表示，所以我这里猜测&quot;\\s&quot;就是代表空格的意思</span></span><br><span class="line">    <span class="keyword">return</span> str.toString().replaceAll(<span class="string">&quot;\\s&quot;</span>, <span class="string">&quot;%20&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">public String replaceSpace(StringBuffer str) &#123;
+    //return str.toString().replaceAll(&quot; &quot;, &quot;%20&quot;);
+    //public String replaceAll(String regex,String replacement)
+    //用给定的替换替换与给定的regular expression匹配的此字符串的每个子字符串。 
+    //\ 转义字符. 如果你要使用 &quot;\&quot; 本身, 则应该使用 &quot;\\&quot;. String类型中的空格用“\s”表示，所以我这里猜测&quot;\\s&quot;就是代表空格的意思
+    return str.toString().replaceAll(&quot;\\s&quot;, &quot;%20&quot;);
+&#125;
+</code></pre>
 <h2 id="数值的整数次方"><a href="#数值的整数次方" class="headerlink" title="数值的整数次方"></a>数值的整数次方</h2><p><strong>题目描述：</strong></p>
 <p>给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。</p>
 <p><strong>问题解析：</strong></p>
 <p>这道题算是比较麻烦和难一点的一个了。我这里采用的是<strong>二分幂</strong>思想，当然也可以采用<strong>快速幂</strong>。<br>更具剑指offer书中细节，该题的解题思路如下：<br>1.当底数为0且指数&lt;0时，会出现对0求倒数的情况，需进行错误处理，设置一个全局变量；<br>2.判断底数是否等于0，由于base为double型，所以不能直接用&#x3D;&#x3D;判断<br>3.优化求幂函数（二分幂）。<br>当n为偶数，a^n &#x3D;（a^n&#x2F;2）*（a^n&#x2F;2）；<br>当n为奇数，a^n &#x3D; a^[(n-1)&#x2F;2] * a^[(n-1)&#x2F;2] * a。时间复杂度O(logn)</p>
 <p><strong>时间复杂度</strong>：O(logn)</p>
 <p><strong>示例代码：</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Solution</span> &#123; </span><br><span class="line">      <span class="type">boolean</span> invalidInput=<span class="literal">false</span>;    </span><br><span class="line">      <span class="keyword">public</span> <span class="type">double</span> <span class="title function_">Power</span><span class="params">(<span class="type">double</span> base, <span class="type">int</span> exponent)</span> &#123;</span><br><span class="line">          <span class="comment">//如果底数等于0并且指数小于0</span></span><br><span class="line">          <span class="comment">//由于base为double型，不能直接用==判断</span></span><br><span class="line">        <span class="keyword">if</span>(equal(base,<span class="number">0.0</span>)&amp;&amp;exponent&lt;<span class="number">0</span>)&#123;</span><br><span class="line">            invalidInput=<span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0.0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> absexponent=exponent;</span><br><span class="line">         <span class="comment">//如果指数小于0，将指数转正</span></span><br><span class="line">        <span class="keyword">if</span>(exponent&lt;<span class="number">0</span>)</span><br><span class="line">            absexponent=-exponent;</span><br><span class="line">         <span class="comment">//getPower方法求出base的exponent次方。</span></span><br><span class="line">        <span class="type">double</span> res=getPower(base,absexponent);</span><br><span class="line">         <span class="comment">//如果指数小于0，所得结果为上面求的结果的倒数</span></span><br><span class="line">        <span class="keyword">if</span>(exponent&lt;<span class="number">0</span>)</span><br><span class="line">            res=<span class="number">1.0</span>/res;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">  &#125;</span><br><span class="line">    <span class="comment">//比较两个double型变量是否相等的方法</span></span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">equal</span><span class="params">(<span class="type">double</span> num1,<span class="type">double</span> num2)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(num1-num2&gt;-<span class="number">0.000001</span>&amp;&amp;num1-num2&lt;<span class="number">0.000001</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//求出b的e次方的方法</span></span><br><span class="line">    <span class="type">double</span> <span class="title function_">getPower</span><span class="params">(<span class="type">double</span> b,<span class="type">int</span> e)</span>&#123;</span><br><span class="line">        <span class="comment">//如果指数为0，返回1</span></span><br><span class="line">        <span class="keyword">if</span>(e==<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1.0</span>;</span><br><span class="line">        <span class="comment">//如果指数为1，返回b</span></span><br><span class="line">        <span class="keyword">if</span>(e==<span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> b;</span><br><span class="line">        <span class="comment">//e&gt;&gt;1相等于e/2，这里就是求a^n =（a^n/2）*（a^n/2）</span></span><br><span class="line">        <span class="type">double</span> result=getPower(b,e&gt;&gt;<span class="number">1</span>);</span><br><span class="line">        result*=result;</span><br><span class="line">        <span class="comment">//如果指数n为奇数，则要再乘一次底数base</span></span><br><span class="line">        <span class="keyword">if</span>((e&amp;<span class="number">1</span>)==<span class="number">1</span>)</span><br><span class="line">            result*=b;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">public class Solution &#123; 
+      boolean invalidInput=false;    
+      public double Power(double base, int exponent) &#123;
+          //如果底数等于0并且指数小于0
+          //由于base为double型，不能直接用==判断
+        if(equal(base,0.0)&amp;&amp;exponent&lt;0)&#123;
+            invalidInput=true;
+            return 0.0;
+        &#125;
+        int absexponent=exponent;
+         //如果指数小于0，将指数转正
+        if(exponent&lt;0)
+            absexponent=-exponent;
+         //getPower方法求出base的exponent次方。
+        double res=getPower(base,absexponent);
+         //如果指数小于0，所得结果为上面求的结果的倒数
+        if(exponent&lt;0)
+            res=1.0/res;
+        return res;
+  &#125;
+    //比较两个double型变量是否相等的方法
+    boolean equal(double num1,double num2)&#123;
+        if(num1-num2&gt;-0.000001&amp;&amp;num1-num2&lt;0.000001)
+            return true;
+        else
+            return false;
+    &#125;
+    //求出b的e次方的方法
+    double getPower(double b,int e)&#123;
+        //如果指数为0，返回1
+        if(e==0)
+            return 1.0;
+        //如果指数为1，返回b
+        if(e==1)
+            return b;
+        //e&gt;&gt;1相等于e/2，这里就是求a^n =（a^n/2）*（a^n/2）
+        double result=getPower(b,e&gt;&gt;1);
+        result*=result;
+        //如果指数n为奇数，则要再乘一次底数base
+        if((e&amp;1)==1)
+            result*=b;
+        return result;
+    &#125;
+&#125;
+</code></pre>
 <p>当然这一题也可以采用笨方法：累乘。不过这种方法的时间复杂度为O（n），这样没有前一种方法效率高。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用累乘</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">double</span> <span class="title function_">powerAnother</span><span class="params">(<span class="type">double</span> base, <span class="type">int</span> exponent)</span> &#123;</span><br><span class="line">    <span class="type">double</span> <span class="variable">result</span> <span class="operator">=</span> <span class="number">1.0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; Math.abs(exponent); i++) &#123;</span><br><span class="line">        result *= base;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (exponent &gt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span> / result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">// 使用累乘
+public double powerAnother(double base, int exponent) &#123;
+    double result = 1.0;
+    for (int i = 0; i &lt; Math.abs(exponent); i++) &#123;
+        result *= base;
+    &#125;
+    if (exponent &gt;= 0)
+        return result;
+    else
+        return 1 / result;
+&#125;
+</code></pre>
 <h2 id="调整数组顺序使奇数位于偶数前面"><a href="#调整数组顺序使奇数位于偶数前面" class="headerlink" title="调整数组顺序使奇数位于偶数前面"></a>调整数组顺序使奇数位于偶数前面</h2><p><strong>题目描述：</strong></p>
 <p>输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。</p>
 <p><strong>问题解析：</strong></p>
 <p>这道题有挺多种解法的，给大家介绍一种我觉得挺好理解的方法：<br>我们首先统计奇数的个数假设为n,然后新建一个等长数组，然后通过循环判断原数组中的元素为偶数还是奇数。如果是则从数组下标0的元素开始，把该奇数添加到新数组；如果是偶数则从数组下标为n的元素开始把该偶数添加到新数组中。</p>
 <p><strong>示例代码：</strong></p>
 <p>时间复杂度为O（n），空间复杂度为O（n）的算法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">reOrderArray</span><span class="params">(<span class="type">int</span> [] array)</span> &#123;</span><br><span class="line">        <span class="comment">//如果数组长度等于0或者等于1，什么都不做直接返回</span></span><br><span class="line">        <span class="keyword">if</span>(array.length==<span class="number">0</span>||array.length==<span class="number">1</span>) </span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">//oddCount：保存奇数个数</span></span><br><span class="line">        <span class="comment">//oddBegin：奇数从数组头部开始添加</span></span><br><span class="line">        <span class="type">int</span> oddCount=<span class="number">0</span>,oddBegin=<span class="number">0</span>;</span><br><span class="line">        <span class="comment">//新建一个数组</span></span><br><span class="line">        <span class="type">int</span>[] newArray=<span class="keyword">new</span> <span class="title class_">int</span>[array.length];</span><br><span class="line">        <span class="comment">//计算出（数组中的奇数个数）开始添加元素</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>((array[i]&amp;<span class="number">1</span>)==<span class="number">1</span>) oddCount++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            <span class="comment">//如果数为基数新数组从头开始添加元素</span></span><br><span class="line">            <span class="comment">//如果为偶数就从oddCount（数组中的奇数个数）开始添加元素</span></span><br><span class="line">            <span class="keyword">if</span>((array[i]&amp;<span class="number">1</span>)==<span class="number">1</span>) </span><br><span class="line">                newArray[oddBegin++]=array[i];</span><br><span class="line">            <span class="keyword">else</span> newArray[oddCount++]=array[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            array[i]=newArray[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">public class Solution &#123;
+    public void reOrderArray(int [] array) &#123;
+        //如果数组长度等于0或者等于1，什么都不做直接返回
+        if(array.length==0||array.length==1) 
+            return;
+        //oddCount：保存奇数个数
+        //oddBegin：奇数从数组头部开始添加
+        int oddCount=0,oddBegin=0;
+        //新建一个数组
+        int[] newArray=new int[array.length];
+        //计算出（数组中的奇数个数）开始添加元素
+        for(int i=0;i&lt;array.length;i++)&#123;
+            if((array[i]&amp;1)==1) oddCount++;
+        &#125;
+        for(int i=0;i&lt;array.length;i++)&#123;
+            //如果数为基数新数组从头开始添加元素
+            //如果为偶数就从oddCount（数组中的奇数个数）开始添加元素
+            if((array[i]&amp;1)==1) 
+                newArray[oddBegin++]=array[i];
+            else newArray[oddCount++]=array[i];
+        &#125;
+        for(int i=0;i&lt;array.length;i++)&#123;
+            array[i]=newArray[i];
+        &#125;
+    &#125;
+&#125;
+</code></pre>
 <h2 id="链表中倒数第k个节点"><a href="#链表中倒数第k个节点" class="headerlink" title="链表中倒数第k个节点"></a>链表中倒数第k个节点</h2><p><strong>题目描述：</strong></p>
 <p>输入一个链表，输出该链表中倒数第k个结点</p>
 <p><strong>问题分析：</strong></p>
@@ -238,8 +391,45 @@
 <p><strong>考察内容：</strong></p>
 <p>链表+代码的鲁棒性</p>
 <p><strong>示例代码：</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">//链表类</span></span><br><span class="line"><span class="comment">public class ListNode &#123;</span></span><br><span class="line"><span class="comment">    int val;</span></span><br><span class="line"><span class="comment">    ListNode next = null;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    ListNode(int val) &#123;</span></span><br><span class="line"><span class="comment">        this.val = val;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">&#125;*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//时间复杂度O(n),一次遍历即可</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> ListNode <span class="title function_">FindKthToTail</span><span class="params">(ListNode head,<span class="type">int</span> k)</span> &#123;</span><br><span class="line">        ListNode pre=<span class="literal">null</span>,p=<span class="literal">null</span>;</span><br><span class="line">        <span class="comment">//两个指针都指向头结点</span></span><br><span class="line">        p=head;</span><br><span class="line">        pre=head;</span><br><span class="line">        <span class="comment">//记录k值</span></span><br><span class="line">        <span class="type">int</span> a=k;</span><br><span class="line">        <span class="comment">//记录节点的个数</span></span><br><span class="line">        <span class="type">int</span> count=<span class="number">0</span>;</span><br><span class="line">        <span class="comment">//p指针先跑，并且记录节点数，当p指针跑了k-1个节点后，pre指针开始跑，</span></span><br><span class="line">        <span class="comment">//当p指针跑到最后时，pre所指指针就是倒数第k个节点</span></span><br><span class="line">        <span class="keyword">while</span>(p!=<span class="literal">null</span>)&#123;</span><br><span class="line">            p=p.next;</span><br><span class="line">            count++;</span><br><span class="line">            <span class="keyword">if</span>(k&lt;<span class="number">1</span>)&#123;</span><br><span class="line">                pre=pre.next;</span><br><span class="line">            &#125;</span><br><span class="line">            k--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果节点个数小于所求的倒数第k个节点，则返回空</span></span><br><span class="line">        <span class="keyword">if</span>(count&lt;a) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">return</span> pre;</span><br><span class="line">            </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">/*
+//链表类
+public class ListNode &#123;
+    int val;
+    ListNode next = null;
 
+    ListNode(int val) &#123;
+        this.val = val;
+    &#125;
+&#125;*/
+
+//时间复杂度O(n),一次遍历即可
+public class Solution &#123;
+    public ListNode FindKthToTail(ListNode head,int k) &#123;
+        ListNode pre=null,p=null;
+        //两个指针都指向头结点
+        p=head;
+        pre=head;
+        //记录k值
+        int a=k;
+        //记录节点的个数
+        int count=0;
+        //p指针先跑，并且记录节点数，当p指针跑了k-1个节点后，pre指针开始跑，
+        //当p指针跑到最后时，pre所指指针就是倒数第k个节点
+        while(p!=null)&#123;
+            p=p.next;
+            count++;
+            if(k&lt;1)&#123;
+                pre=pre.next;
+            &#125;
+            k--;
+        &#125;
+        //如果节点个数小于所求的倒数第k个节点，则返回空
+        if(count&lt;a) return null;
+        return pre;
+            
+    &#125;
+&#125;
+</code></pre>
 <h2 id="反转链表"><a href="#反转链表" class="headerlink" title="反转链表"></a>反转链表</h2><p><strong>题目描述：</strong></p>
 <p>输入一个链表，反转链表后，输出链表的所有元素。</p>
 <p><strong>问题分析：</strong></p>
@@ -248,8 +438,33 @@
 <p><strong>考察内容：</strong></p>
 <p>链表+代码的鲁棒性</p>
 <p><strong>示例代码：</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">public class ListNode &#123;</span></span><br><span class="line"><span class="comment">    int val;</span></span><br><span class="line"><span class="comment">    ListNode next = null;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    ListNode(int val) &#123;</span></span><br><span class="line"><span class="comment">        this.val = val;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">&#125;*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> ListNode <span class="title function_">ReverseList</span><span class="params">(ListNode head)</span> &#123;</span><br><span class="line">       <span class="type">ListNode</span> <span class="variable">next</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">       <span class="type">ListNode</span> <span class="variable">pre</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">while</span> (head != <span class="literal">null</span>) &#123;</span><br><span class="line">              <span class="comment">//保存要反转到头来的那个节点</span></span><br><span class="line">               next = head.next;</span><br><span class="line">               <span class="comment">//要反转的那个节点指向已经反转的上一个节点</span></span><br><span class="line">               head.next = pre;</span><br><span class="line">               <span class="comment">//上一个已经反转到头部的节点</span></span><br><span class="line">               pre = head;</span><br><span class="line">               <span class="comment">//一直向链表尾走</span></span><br><span class="line">               head = next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> pre;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">/*
+public class ListNode &#123;
+    int val;
+    ListNode next = null;
 
+    ListNode(int val) &#123;
+        this.val = val;
+    &#125;
+&#125;*/
+public class Solution &#123;
+    public ListNode ReverseList(ListNode head) &#123;
+       ListNode next = null;
+       ListNode pre = null;
+        while (head != null) &#123;
+              //保存要反转到头来的那个节点
+               next = head.next;
+               //要反转的那个节点指向已经反转的上一个节点
+               head.next = pre;
+               //上一个已经反转到头部的节点
+               pre = head;
+               //一直向链表尾走
+               head = next;
+        &#125;
+        return pre;
+    &#125;
+&#125;
+</code></pre>
 <h2 id="合并两个排序的链表"><a href="#合并两个排序的链表" class="headerlink" title="合并两个排序的链表"></a>合并两个排序的链表</h2><p><strong>题目描述：</strong></p>
 <p>输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。</p>
 <p><strong>问题分析：</strong></p>
@@ -264,11 +479,78 @@
 <p>链表+代码的鲁棒性</p>
 <p><strong>示例代码：</strong></p>
 <p>非递归版本：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">public class ListNode &#123;</span></span><br><span class="line"><span class="comment">    int val;</span></span><br><span class="line"><span class="comment">    ListNode next = null;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    ListNode(int val) &#123;</span></span><br><span class="line"><span class="comment">        this.val = val;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">&#125;*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> ListNode <span class="title function_">Merge</span><span class="params">(ListNode list1,ListNode list2)</span> &#123;</span><br><span class="line">       <span class="comment">//list1为空，直接返回list2</span></span><br><span class="line">       <span class="keyword">if</span>(list1 == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> list2;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//list2为空，直接返回list1</span></span><br><span class="line">        <span class="keyword">if</span>(list2 == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> list1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">ListNode</span> <span class="variable">mergeHead</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="type">ListNode</span> <span class="variable">current</span> <span class="operator">=</span> <span class="literal">null</span>;   </span><br><span class="line">        <span class="comment">//当list1和list2不为空时</span></span><br><span class="line">        <span class="keyword">while</span>(list1!=<span class="literal">null</span> &amp;&amp; list2!=<span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="comment">//取较小值作头结点 </span></span><br><span class="line">            <span class="keyword">if</span>(list1.val &lt;= list2.val)&#123;</span><br><span class="line">                <span class="keyword">if</span>(mergeHead == <span class="literal">null</span>)&#123;</span><br><span class="line">                   mergeHead = current = list1;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                   current.next = list1;</span><br><span class="line">                    <span class="comment">//current节点保存list1节点的值因为下一次还要用</span></span><br><span class="line">                   current = list1;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//list1指向下一个节点</span></span><br><span class="line">                list1 = list1.next;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(mergeHead == <span class="literal">null</span>)&#123;</span><br><span class="line">                   mergeHead = current = list2;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                   current.next = list2;</span><br><span class="line">                     <span class="comment">//current节点保存list2节点的值因为下一次还要用</span></span><br><span class="line">                   current = list2;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//list2指向下一个节点</span></span><br><span class="line">                list2 = list2.next;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(list1 == <span class="literal">null</span>)&#123;</span><br><span class="line">            current.next = list2;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            current.next = list1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> mergeHead;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">/*
+public class ListNode &#123;
+    int val;
+    ListNode next = null;
 
+    ListNode(int val) &#123;
+        this.val = val;
+    &#125;
+&#125;*/
+public class Solution &#123;
+    public ListNode Merge(ListNode list1,ListNode list2) &#123;
+       //list1为空，直接返回list2
+       if(list1 == null)&#123;
+            return list2;
+        &#125;
+        //list2为空，直接返回list1
+        if(list2 == null)&#123;
+            return list1;
+        &#125;
+        ListNode mergeHead = null;
+        ListNode current = null;   
+        //当list1和list2不为空时
+        while(list1!=null &amp;&amp; list2!=null)&#123;
+            //取较小值作头结点 
+            if(list1.val &lt;= list2.val)&#123;
+                if(mergeHead == null)&#123;
+                   mergeHead = current = list1;
+                &#125;else&#123;
+                   current.next = list1;
+                    //current节点保存list1节点的值因为下一次还要用
+                   current = list1;
+                &#125;
+                //list1指向下一个节点
+                list1 = list1.next;
+            &#125;else&#123;
+                if(mergeHead == null)&#123;
+                   mergeHead = current = list2;
+                &#125;else&#123;
+                   current.next = list2;
+                     //current节点保存list2节点的值因为下一次还要用
+                   current = list2;
+                &#125;
+                //list2指向下一个节点
+                list2 = list2.next;
+            &#125;
+        &#125;
+        if(list1 == null)&#123;
+            current.next = list2;
+        &#125;else&#123;
+            current.next = list1;
+        &#125;
+        return mergeHead;
+    &#125;
+&#125;
+</code></pre>
 <p>递归版本：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> ListNode <span class="title function_">Merge</span><span class="params">(ListNode list1,ListNode list2)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(list1 == <span class="literal">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> list2;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(list2 == <span class="literal">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> list1;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(list1.val &lt;= list2.val)&#123;</span><br><span class="line">        list1.next = Merge(list1.next, list2);</span><br><span class="line">        <span class="keyword">return</span> list1;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        list2.next = Merge(list1, list2.next);</span><br><span class="line">        <span class="keyword">return</span> list2;</span><br><span class="line">    &#125;       </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">public ListNode Merge(ListNode list1,ListNode list2) &#123;
+    if(list1 == null)&#123;
+        return list2;
+    &#125;
+    if(list2 == null)&#123;
+        return list1;
+    &#125;
+    if(list1.val &lt;= list2.val)&#123;
+        list1.next = Merge(list1.next, list2);
+        return list1;
+    &#125;else&#123;
+        list2.next = Merge(list1, list2.next);
+        return list2;
+    &#125;       
+&#125;
+</code></pre>
 <h2 id="用两个栈实现队列"><a href="#用两个栈实现队列" class="headerlink" title="用两个栈实现队列"></a>用两个栈实现队列</h2><p><strong>题目描述：</strong></p>
 <p>用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型。</p>
 <p><strong>问题分析：</strong></p>
@@ -277,8 +559,34 @@
 <p><strong>考察内容：</strong></p>
 <p>队列+栈</p>
 <p>示例代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//左程云的《程序员代码面试指南》的答案</span></span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    Stack&lt;Integer&gt; stack1 = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Integer&gt;();</span><br><span class="line">    Stack&lt;Integer&gt; stack2 = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Integer&gt;();</span><br><span class="line">     </span><br><span class="line">    <span class="comment">//当执行push操作时，将元素添加到stack1</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">push</span><span class="params">(<span class="type">int</span> node)</span> &#123;</span><br><span class="line">        stack1.push(node);</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pop</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//如果两个队列都为空则抛出异常,说明用户没有push进任何元素</span></span><br><span class="line">        <span class="keyword">if</span>(stack1.empty()&amp;&amp;stack2.empty())&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;Queue is empty!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果stack2不为空直接对stack2执行pop操作，</span></span><br><span class="line">        <span class="keyword">if</span>(stack2.empty())&#123;</span><br><span class="line">            <span class="keyword">while</span>(!stack1.empty())&#123;</span><br><span class="line">                <span class="comment">//将stack1的元素按后进先出push进stack2里面</span></span><br><span class="line">                stack2.push(stack1.pop());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">          <span class="keyword">return</span> stack2.pop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">//左程云的《程序员代码面试指南》的答案
+import java.util.Stack;
+ 
+public class Solution &#123;
+    Stack&lt;Integer&gt; stack1 = new Stack&lt;Integer&gt;();
+    Stack&lt;Integer&gt; stack2 = new Stack&lt;Integer&gt;();
+     
+    //当执行push操作时，将元素添加到stack1
+    public void push(int node) &#123;
+        stack1.push(node);
+    &#125;
+     
+    public int pop() &#123;
+        //如果两个队列都为空则抛出异常,说明用户没有push进任何元素
+        if(stack1.empty()&amp;&amp;stack2.empty())&#123;
+            throw new RuntimeException(&quot;Queue is empty!&quot;);
+        &#125;
+        //如果stack2不为空直接对stack2执行pop操作，
+        if(stack2.empty())&#123;
+            while(!stack1.empty())&#123;
+                //将stack1的元素按后进先出push进stack2里面
+                stack2.push(stack1.pop());
+            &#125;
+        &#125;
+          return stack2.pop();
+    &#125;
+&#125;
+</code></pre>
 <h2 id="栈的压入-弹出序列"><a href="#栈的压入-弹出序列" class="headerlink" title="栈的压入,弹出序列"></a>栈的压入,弹出序列</h2><p><strong>题目描述：</strong></p>
 <p>输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4，5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）</p>
 <p><strong>题目分析：</strong></p>
@@ -297,4 +605,28 @@
 <p><strong>考察内容：</strong></p>
 <p>栈</p>
 <p><strong>示例代码：</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"><span class="comment">//这道题没想出来，参考了Alias同学的答案：https://www.nowcoder.com/questionTerminal/d77d11405cc7470d82554cb392585106</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">IsPopOrder</span><span class="params">(<span class="type">int</span> [] pushA,<span class="type">int</span> [] popA)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(pushA.length == <span class="number">0</span> || popA.length == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        Stack&lt;Integer&gt; s = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Integer&gt;();</span><br><span class="line">        <span class="comment">//用于标识弹出序列的位置</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">popIndex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i&lt; pushA.length;i++)&#123;</span><br><span class="line">            s.push(pushA[i]);</span><br><span class="line">            <span class="comment">//如果栈不为空，且栈顶元素等于弹出序列</span></span><br><span class="line">            <span class="keyword">while</span>(!s.empty() &amp;&amp;s.peek() == popA[popIndex])&#123;</span><br><span class="line">                <span class="comment">//出栈</span></span><br><span class="line">                s.pop();</span><br><span class="line">                <span class="comment">//弹出序列向后一位</span></span><br><span class="line">                popIndex++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s.empty();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">阿泽</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://rongzhiy.github.io/2023/03/17/cs-basics/algorithms/the-sword-refers-to-offer/">https://rongzhiy.github.io/2023/03/17/cs-basics/algorithms/the-sword-refers-to-offer/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://rongzhiy.github.io" target="_blank">Rongzhiyのblog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95/">算法</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/03/17/java/basis/bigdecimal/"><img class="prev-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">BigDecimal 详解</div></div></a></div><div class="next-post pull-right"><a href="/2023/03/17/cs-basics/algorithms/string-algorithm-problems/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">几道常见的字符串算法题</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/03/17/cs-basics/algorithms/10-classical-sorting-algorithms/" title="十大经典排序算法总结"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">十大经典排序算法总结</div></div></a></div><div><a href="/2023/03/17/cs-basics/algorithms/linkedlist-algorithm-problems/" title="几道常见的链表算法题"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">几道常见的链表算法题</div></div></a></div><div><a href="/2023/03/17/cs-basics/algorithms/string-algorithm-problems/" title="几道常见的字符串算法题"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">几道常见的字符串算法题</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">阿泽</div><div class="author-info__description">Stay Hungry,Stay Foolish</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">91</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/rongzhiy"><i class="fab fa-github"></i><span>github</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/rongzhiy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:rongzhiy2735@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97"><span class="toc-number">1.</span> <span class="toc-text">斐波那契数列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%B3%E5%8F%B0%E9%98%B6%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">跳台阶问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%98%E6%80%81%E8%B7%B3%E5%8F%B0%E9%98%B6%E9%97%AE%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">变态跳台阶问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E6%9F%A5%E6%89%BE"><span class="toc-number">4.</span> <span class="toc-text">二维数组查找</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%BF%E6%8D%A2%E7%A9%BA%E6%A0%BC"><span class="toc-number">5.</span> <span class="toc-text">替换空格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E5%80%BC%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E6%96%B9"><span class="toc-number">6.</span> <span class="toc-text">数值的整数次方</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E6%95%B0%E7%BB%84%E9%A1%BA%E5%BA%8F%E4%BD%BF%E5%A5%87%E6%95%B0%E4%BD%8D%E4%BA%8E%E5%81%B6%E6%95%B0%E5%89%8D%E9%9D%A2"><span class="toc-number">7.</span> <span class="toc-text">调整数组顺序使奇数位于偶数前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACk%E4%B8%AA%E8%8A%82%E7%82%B9"><span class="toc-number">8.</span> <span class="toc-text">链表中倒数第k个节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8"><span class="toc-number">9.</span> <span class="toc-text">反转链表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E7%9A%84%E9%93%BE%E8%A1%A8"><span class="toc-number">10.</span> <span class="toc-text">合并两个排序的链表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97"><span class="toc-number">11.</span> <span class="toc-text">用两个栈实现队列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E7%9A%84%E5%8E%8B%E5%85%A5-%E5%BC%B9%E5%87%BA%E5%BA%8F%E5%88%97"><span class="toc-number">12.</span> <span class="toc-text">栈的压入,弹出序列</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/04/26/ChatGPT/ChatGPTGuide/" title="ChatGPT使用指南"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ChatGPT使用指南"/></a><div class="content"><a class="title" href="/2023/04/26/ChatGPT/ChatGPTGuide/" title="ChatGPT使用指南">ChatGPT使用指南</a><time datetime="2023-04-26T12:00:00.000Z" title="发表于 2023-04-26 20:00:00">2023-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/01/practice/%E4%BA%91%E5%A4%A7%E5%8D%83%E5%AF%BB/" title="云大千寻 - 基于拍照识别的失物找寻系统"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="云大千寻 - 基于拍照识别的失物找寻系统"/></a><div class="content"><a class="title" href="/2023/04/01/practice/%E4%BA%91%E5%A4%A7%E5%8D%83%E5%AF%BB/" title="云大千寻 - 基于拍照识别的失物找寻系统">云大千寻 - 基于拍照识别的失物找寻系统</a><time datetime="2023-04-01T12:00:00.000Z" title="发表于 2023-04-01 20:00:00">2023-04-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/01/practice/%E5%9F%BA%E4%BA%8ESpringBoot%E7%9A%84%E6%A0%A1%E5%9B%AD%E9%97%AE%E7%AD%94%E7%A4%BE%E5%8C%BA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%EF%BC%88%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%EF%BC%89/" title="基于SpringBoot的校园问答社区系统设计与实现（前后端分离）"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于SpringBoot的校园问答社区系统设计与实现（前后端分离）"/></a><div class="content"><a class="title" href="/2023/04/01/practice/%E5%9F%BA%E4%BA%8ESpringBoot%E7%9A%84%E6%A0%A1%E5%9B%AD%E9%97%AE%E7%AD%94%E7%A4%BE%E5%8C%BA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%EF%BC%88%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%EF%BC%89/" title="基于SpringBoot的校园问答社区系统设计与实现（前后端分离）">基于SpringBoot的校园问答社区系统设计与实现（前后端分离）</a><time datetime="2023-04-01T12:00:00.000Z" title="发表于 2023-04-01 20:00:00">2023-04-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/open-source-project/tutorial/" title="Java 优质开源技术教程"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java 优质开源技术教程"/></a><div class="content"><a class="title" href="/2023/03/17/open-source-project/tutorial/" title="Java 优质开源技术教程">Java 优质开源技术教程</a><time datetime="2023-03-17T09:00:13.505Z" title="发表于 2023-03-17 17:00:13">2023-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/open-source-project/tools/" title="Java 优质开源开发工具"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java 优质开源开发工具"/></a><div class="content"><a class="title" href="/2023/03/17/open-source-project/tools/" title="Java 优质开源开发工具">Java 优质开源开发工具</a><time datetime="2023-03-17T09:00:13.503Z" title="发表于 2023-03-17 17:00:13">2023-03-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023  <i id="heartbeat" class="fa fas fa-heartbeat"></i> 阿泽</div><div class="framework-info"><span>框架 </span><a href="">Hexo</a></div></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer src="https://npm.elemecdn.com/jquery@latest/dist/jquery.min.js"></script><script defer data-pjax src="/js/cat.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+<pre><code class="java">import java.util.ArrayList;
+import java.util.Stack;
+//这道题没想出来，参考了Alias同学的答案：https://www.nowcoder.com/questionTerminal/d77d11405cc7470d82554cb392585106
+public class Solution &#123;
+    public boolean IsPopOrder(int [] pushA,int [] popA) &#123;
+        if(pushA.length == 0 || popA.length == 0)
+            return false;
+        Stack&lt;Integer&gt; s = new Stack&lt;Integer&gt;();
+        //用于标识弹出序列的位置
+        int popIndex = 0;
+        for(int i = 0; i&lt; pushA.length;i++)&#123;
+            s.push(pushA[i]);
+            //如果栈不为空，且栈顶元素等于弹出序列
+            while(!s.empty() &amp;&amp;s.peek() == popA[popIndex])&#123;
+                //出栈
+                s.pop();
+                //弹出序列向后一位
+                popIndex++;
+            &#125;
+        &#125;
+        return s.empty();
+    &#125;
+&#125;
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">阿泽</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://rongzhiy.github.io/2023/03/17/cs-basics/algorithms/the-sword-refers-to-offer/">https://rongzhiy.github.io/2023/03/17/cs-basics/algorithms/the-sword-refers-to-offer/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://rongzhiy.github.io" target="_blank">Rongzhiyのblog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95/">算法</a></div><div class="post_share"><div class="social-share" data-image="https://tva1.sinaimg.cn/large/008ApSknly1hhbjyp7zrtj32yo1o0kjm.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/03/17/java/basis/bigdecimal/"><img class="prev-cover" src="https://tva1.sinaimg.cn/large/008ApSknly1hhbjwpxcmzj34mo2lrkjm.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">BigDecimal 详解</div></div></a></div><div class="next-post pull-right"><a href="/2023/03/17/cs-basics/algorithms/string-algorithm-problems/"><img class="next-cover" src="https://tva1.sinaimg.cn/large/008ApSknly1hhbjzgpwlnj32yo1uo7wh.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">几道常见的字符串算法题</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/03/17/cs-basics/algorithms/10-classical-sorting-algorithms/" title="十大经典排序算法总结"><img class="cover" src="https://tva1.sinaimg.cn/large/008ApSknly1hhbjwalli8j34mo2lrwui.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">十大经典排序算法总结</div></div></a></div><div><a href="/2023/03/17/cs-basics/algorithms/string-algorithm-problems/" title="几道常见的字符串算法题"><img class="cover" src="https://tva1.sinaimg.cn/large/008ApSknly1hhbjzgpwlnj32yo1uo7wh.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">几道常见的字符串算法题</div></div></a></div><div><a href="/2023/03/17/cs-basics/algorithms/linkedlist-algorithm-problems/" title="几道常见的链表算法题"><img class="cover" src="https://tva1.sinaimg.cn/large/008ApSknly1hhbjzba89fj32yo1uo7ik.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-17</div><div class="title">几道常见的链表算法题</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">阿泽</div><div class="author-info__description">Stay Hungry,Stay Foolish</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">92</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/rongzhiy"><i class="fab fa-github"></i><span>github</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="mailto:rongzhiy2735@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2735545128&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎关注！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97"><span class="toc-number">1.</span> <span class="toc-text">斐波那契数列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%B3%E5%8F%B0%E9%98%B6%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">跳台阶问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%98%E6%80%81%E8%B7%B3%E5%8F%B0%E9%98%B6%E9%97%AE%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">变态跳台阶问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E6%9F%A5%E6%89%BE"><span class="toc-number">4.</span> <span class="toc-text">二维数组查找</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%BF%E6%8D%A2%E7%A9%BA%E6%A0%BC"><span class="toc-number">5.</span> <span class="toc-text">替换空格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E5%80%BC%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E6%96%B9"><span class="toc-number">6.</span> <span class="toc-text">数值的整数次方</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E6%95%B0%E7%BB%84%E9%A1%BA%E5%BA%8F%E4%BD%BF%E5%A5%87%E6%95%B0%E4%BD%8D%E4%BA%8E%E5%81%B6%E6%95%B0%E5%89%8D%E9%9D%A2"><span class="toc-number">7.</span> <span class="toc-text">调整数组顺序使奇数位于偶数前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACk%E4%B8%AA%E8%8A%82%E7%82%B9"><span class="toc-number">8.</span> <span class="toc-text">链表中倒数第k个节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8"><span class="toc-number">9.</span> <span class="toc-text">反转链表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E7%9A%84%E9%93%BE%E8%A1%A8"><span class="toc-number">10.</span> <span class="toc-text">合并两个排序的链表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97"><span class="toc-number">11.</span> <span class="toc-text">用两个栈实现队列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E7%9A%84%E5%8E%8B%E5%85%A5-%E5%BC%B9%E5%87%BA%E5%BA%8F%E5%88%97"><span class="toc-number">12.</span> <span class="toc-text">栈的压入,弹出序列</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/open-source-project/%E5%B9%BF%E5%91%8A%E6%8B%A6%E6%88%AA/" title="李跳跳 安卓跳过广告"><img src="https://tva1.sinaimg.cn/large/008ApSknly1hhbjvo1c43j33401r07kx.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="李跳跳 安卓跳过广告"/></a><div class="content"><a class="title" href="/2023/08/27/open-source-project/%E5%B9%BF%E5%91%8A%E6%8B%A6%E6%88%AA/" title="李跳跳 安卓跳过广告">李跳跳 安卓跳过广告</a><time datetime="2023-08-27T11:07:56.206Z" title="发表于 2023-08-27 19:07:56">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/26/ChatGPT/ChatGPTGuide/" title="ChatGPT使用指南"><img src="https://tva1.sinaimg.cn/large/008ApSknly1hhbjz5coc5j31z40w04qp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ChatGPT使用指南"/></a><div class="content"><a class="title" href="/2023/04/26/ChatGPT/ChatGPTGuide/" title="ChatGPT使用指南">ChatGPT使用指南</a><time datetime="2023-04-26T12:00:00.000Z" title="发表于 2023-04-26 20:00:00">2023-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/01/practice/%E4%BA%91%E5%A4%A7%E5%8D%83%E5%AF%BB/" title="云大千寻 - 基于拍照识别的失物找寻系统"><img src="https://tva1.sinaimg.cn/large/008ApSknly1hhbjz5coc5j31z40w04qp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="云大千寻 - 基于拍照识别的失物找寻系统"/></a><div class="content"><a class="title" href="/2023/04/01/practice/%E4%BA%91%E5%A4%A7%E5%8D%83%E5%AF%BB/" title="云大千寻 - 基于拍照识别的失物找寻系统">云大千寻 - 基于拍照识别的失物找寻系统</a><time datetime="2023-04-01T12:00:00.000Z" title="发表于 2023-04-01 20:00:00">2023-04-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/01/practice/%E5%9F%BA%E4%BA%8ESpringBoot%E7%9A%84%E6%A0%A1%E5%9B%AD%E9%97%AE%E7%AD%94%E7%A4%BE%E5%8C%BA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%EF%BC%88%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%EF%BC%89/" title="基于SpringBoot的校园问答社区系统设计与实现（前后端分离）"><img src="https://tva1.sinaimg.cn/large/008ApSknly1hhbjwpxcmzj34mo2lrkjm.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于SpringBoot的校园问答社区系统设计与实现（前后端分离）"/></a><div class="content"><a class="title" href="/2023/04/01/practice/%E5%9F%BA%E4%BA%8ESpringBoot%E7%9A%84%E6%A0%A1%E5%9B%AD%E9%97%AE%E7%AD%94%E7%A4%BE%E5%8C%BA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%EF%BC%88%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%EF%BC%89/" title="基于SpringBoot的校园问答社区系统设计与实现（前后端分离）">基于SpringBoot的校园问答社区系统设计与实现（前后端分离）</a><time datetime="2023-04-01T12:00:00.000Z" title="发表于 2023-04-01 20:00:00">2023-04-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/17/open-source-project/tutorial/" title="Java 优质开源技术教程"><img src="https://tva1.sinaimg.cn/large/008ApSknly1hhbjwhqw9nj33401r0npd.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java 优质开源技术教程"/></a><div class="content"><a class="title" href="/2023/03/17/open-source-project/tutorial/" title="Java 优质开源技术教程">Java 优质开源技术教程</a><time datetime="2023-03-17T09:00:13.505Z" title="发表于 2023-03-17 17:00:13">2023-03-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023  <i id="heartbeat" class="fa fas fa-heartbeat"></i> 阿泽</div><div class="framework-info"><span>框架 </span><a href="">Hexo</a></div></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script defer src="https://npm.elemecdn.com/jquery@latest/dist/jquery.min.js"></script><script defer data-pjax src="/js/cat.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="true" data-text="富强,民主,文明,和谐,平等,公正,法治,爱国,敬业,诚信,友善" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
